@@ -82,6 +82,7 @@ func createTCPHealthcheckCmd(client *client.Client) *cobra.Command {
 
 	createTCPHealthcheck.PersistentFlags().StringVar(&target, "target", "", "Healthcheck target (ip or domain)")
 	err = createTCPHealthcheck.MarkPersistentFlagRequired("target")
+	exitIfError(err)
 
 	createTCPHealthcheck.PersistentFlags().UintVar(&port, "port", 443, "Healthcheck TCP port")
 
@@ -108,6 +109,7 @@ func updateTCPHealthcheckCmd(client *client.Client) *cobra.Command {
 		Short: "Update a TCP healthcheck",
 		Run: func(cmd *cobra.Command, args []string) {
 			labelsMap, err := toMap(labels)
+			exitIfError(err)
 
 			payload := apitypes.UpdateTCPHealthcheckInput{
 				ID:          id,
@@ -162,6 +164,7 @@ func updateTCPHealthcheckCmd(client *client.Client) *cobra.Command {
 
 	updateTCPHealthcheck.PersistentFlags().StringVar(&target, "target", "", "Healthcheck target (ip or domain)")
 	err = updateTCPHealthcheck.MarkPersistentFlagRequired("target")
+	exitIfError(err)
 
 	updateTCPHealthcheck.PersistentFlags().UintVar(&port, "port", 443, "Healthcheck TCP port")
 

@@ -91,6 +91,7 @@ func createTLSHealthcheckCmd(client *client.Client) *cobra.Command {
 
 	createTLSHealthcheck.PersistentFlags().StringVar(&target, "target", "", "Healthcheck target (ip or domain)")
 	err = createTLSHealthcheck.MarkPersistentFlagRequired("target")
+	exitIfError(err)
 
 	createTLSHealthcheck.PersistentFlags().UintVar(&port, "port", 443, "Healthcheck TLS port")
 
@@ -127,6 +128,7 @@ func updateTLSHealthcheckCmd(client *client.Client) *cobra.Command {
 		Short: "Update a TLS healthcheck",
 		Run: func(cmd *cobra.Command, args []string) {
 			labelsMap, err := toMap(labels)
+			exitIfError(err)
 
 			payload := apitypes.UpdateTLSHealthcheckInput{
 				ID:          id,
@@ -185,6 +187,7 @@ func updateTLSHealthcheckCmd(client *client.Client) *cobra.Command {
 
 	updateTLSHealthcheck.PersistentFlags().StringVar(&target, "target", "", "Healthcheck target (ip or domain)")
 	err = updateTLSHealthcheck.MarkPersistentFlagRequired("target")
+	exitIfError(err)
 
 	updateTLSHealthcheck.PersistentFlags().UintVar(&port, "port", 443, "Healthcheck TLS port")
 	updateTLSHealthcheck.PersistentFlags().StringVar(&key, "key", "", "TLS key file")
