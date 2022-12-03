@@ -1,5 +1,3 @@
-github.com/appclacks/go-types v0.0.0-20221203224540-9ad08ca5c4c4 h1:sZqhfPkC5Gjx4vgbG4myY64iVR+5Gj9hSe54QqAr76k=
-github.com/appclacks/go-types v0.0.0-20221203224540-9ad08ca5c4c4/go.mod h1:ULkbKlyVigBCY+eSEV0scorq+akwJlVbdnLI5xI8IwU=
 github.com/appclacks/go-types v0.0.0-20221203231221-db3ddd7d3ac8 h1:X28wRdIxBEseQDsVtW5zG3JuIHaz6MVwvAq2+GToi3c=
 github.com/appclacks/go-types v0.0.0-20221203231221-db3ddd7d3ac8/go.mod h1:ULkbKlyVigBCY+eSEV0scorq+akwJlVbdnLI5xI8IwU=
 github.com/cheynewallace/tabby v1.1.1 h1:JvUR8waht4Y0S3JF17G6Vhyt+FRhnqVCkk8l4YrOU54=
