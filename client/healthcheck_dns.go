@@ -22,10 +22,11 @@ type internalUpdateHealthcheckInput struct {
 	Labels      map[string]string `json:"labels,omitempty"`
 	Interval    string            `json:"interval"`
 	Enabled     bool              `json:"enabled"`
+	Timeout     string            `json:"timeout"`
 }
 
-func (c *Client) UpdateDNSHealthcheck(input apitypes.UpdateDNSHealthcheckInput) (apitypes.Response, error) {
-	var result apitypes.Response
+func (c *Client) UpdateDNSHealthcheck(input apitypes.UpdateDNSHealthcheckInput) (apitypes.Healthcheck, error) {
+	var result apitypes.Healthcheck
 	internalInput := internalUpdateHealthcheckInput{
 		Name:        input.Name,
 		Description: input.Description,
@@ -39,7 +40,7 @@ func (c *Client) UpdateDNSHealthcheck(input apitypes.UpdateDNSHealthcheckInput) 
 	}
 	_, err = c.sendRequest(fmt.Sprintf("/api/v1/healthcheck/dns/%s", input.ID), http.MethodPut, payload, &result, nil, TokenAuth)
 	if err != nil {
-		return apitypes.Response{}, err
+		return apitypes.Healthcheck{}, err
 	}
 	return result, nil
 }

@@ -7,7 +7,6 @@ import (
 
 	"github.com/appclacks/cli/client"
 	apitypes "github.com/appclacks/go-types"
-	"github.com/cheynewallace/tabby"
 	"github.com/spf13/cobra"
 )
 
@@ -48,15 +47,7 @@ func createDNSHealthcheckCmd(client *client.Client) *cobra.Command {
 				fmt.Println(string(json))
 				os.Exit(0)
 			}
-			t := tabby.New()
-			t.AddHeader("ID", "Name", "Description", "Interval", "Labels", "Enabled", "Definition")
-			jsonLabels, err := json.Marshal(healthcheck.Labels)
-			exitIfError(err)
-			jsonDef, err := json.Marshal(healthcheck.Definition)
-			exitIfError(err)
-			t.AddLine(healthcheck.ID, healthcheck.Name, healthcheck.Description, healthcheck.Interval, string(jsonLabels), healthcheck.Enabled, string(jsonDef))
-
-			t.Print()
+			printHealthcheckTab([]apitypes.Healthcheck{healthcheck})
 			os.Exit(0)
 		},
 	}
@@ -69,7 +60,7 @@ func createDNSHealthcheckCmd(client *client.Client) *cobra.Command {
 
 	createDNSHealthcheck.PersistentFlags().StringSliceVar(&labels, "labels", []string{}, "healthchecks labels (example: foo=bar)")
 
-	createDNSHealthcheck.PersistentFlags().StringVar(&interval, "interval", "60s", "healthcheck interval (examples: 10s, 3m)")
+	createDNSHealthcheck.PersistentFlags().StringVar(&interval, "interval", "60s", "healthcheck interval (examples: 30s, 3m)")
 
 	createDNSHealthcheck.PersistentFlags().StringVar(&timeout, "timeout", "5s", "healthcheck timeout")
 
@@ -122,12 +113,7 @@ func updateDNSHealthcheckCmd(client *client.Client) *cobra.Command {
 				fmt.Println(string(json))
 				os.Exit(0)
 			}
-			t := tabby.New()
-			t.AddHeader("Messages")
-			for _, message := range result.Messages {
-				t.AddLine(message)
-			}
-			t.Print()
+			printHealthcheckTab([]apitypes.Healthcheck{result})
 			os.Exit(0)
 		},
 	}

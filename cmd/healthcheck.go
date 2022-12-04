@@ -42,16 +42,7 @@ func getHealthcheckCmd(client *client.Client) *cobra.Command {
 				fmt.Println(string(json))
 				os.Exit(0)
 			}
-			t := tabby.New()
-
-			t.AddHeader("ID", "Name", "Description", "Interval", "Timeout", "Labels", "Enabled", "Definition")
-			jsonLabels, err := json.Marshal(healthcheck.Labels)
-			exitIfError(err)
-			jsonDef, err := json.Marshal(healthcheck.Definition)
-			exitIfError(err)
-			t.AddLine(healthcheck.ID, healthcheck.Name, healthcheck.Description, healthcheck.Interval, healthcheck.Timeout, string(jsonLabels), healthcheck.Enabled, string(jsonDef))
-
-			t.Print()
+			printHealthcheckTab([]apitypes.Healthcheck{healthcheck})
 			os.Exit(0)
 		},
 	}
@@ -108,21 +99,23 @@ func listHealthchecksCmd(client *client.Client) *cobra.Command {
 				fmt.Println(string(json))
 				os.Exit(0)
 			}
-			t := tabby.New()
-
-			t.AddHeader("ID", "Name", "Description", "Interval", "Timeout", "Labels", "Enabled", "Definition")
-			for _, healthcheck := range result.Result {
-				jsonLabels, err := json.Marshal(healthcheck.Labels)
-				exitIfError(err)
-				jsonDef, err := json.Marshal(healthcheck.Definition)
-				exitIfError(err)
-				t.AddLine(healthcheck.ID, healthcheck.Name, healthcheck.Description, healthcheck.Interval, healthcheck.Timeout, string(jsonLabels), healthcheck.Enabled, string(jsonDef))
-			}
-
-			t.Print()
+			printHealthcheckTab(result.Result)
 			os.Exit(0)
 		},
 	}
 
 	return listHealthchecks
+}
+
+func printHealthcheckTab(healthchecks []apitypes.Healthcheck) {
+	t := tabby.New()
+	t.AddHeader("ID", "Name", "Description", "Interval", "Timeout", "Labels", "Enabled", "Definition")
+	for _, healthcheck := range healthchecks {
+		jsonLabels, err := json.Marshal(healthcheck.Labels)
+		exitIfError(err)
+		jsonDef, err := json.Marshal(healthcheck.Definition)
+		exitIfError(err)
+		t.AddLine(healthcheck.ID, healthcheck.Name, healthcheck.Description, healthcheck.Interval, healthcheck.Timeout, string(jsonLabels), healthcheck.Enabled, string(jsonDef))
+	}
+	t.Print()
 }

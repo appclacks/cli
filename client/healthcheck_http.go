@@ -16,14 +16,15 @@ func (c *Client) CreateHTTPHealthcheck(input apitypes.CreateHTTPHealthcheckInput
 	return result, nil
 }
 
-func (c *Client) UpdateHTTPHealthcheck(input apitypes.UpdateHTTPHealthcheckInput) (apitypes.Response, error) {
-	var result apitypes.Response
+func (c *Client) UpdateHTTPHealthcheck(input apitypes.UpdateHTTPHealthcheckInput) (apitypes.Healthcheck, error) {
+	var result apitypes.Healthcheck
 	internalInput := internalUpdateHealthcheckInput{
 		Name:        input.Name,
 		Description: input.Description,
 		Labels:      input.Labels,
 		Interval:    input.Interval,
 		Enabled:     input.Enabled,
+		Timeout:     input.Timeout,
 	}
 	payload, err := jsonMerge(internalInput, input.HealthcheckHTTPDefinition)
 	if err != nil {
@@ -31,7 +32,7 @@ func (c *Client) UpdateHTTPHealthcheck(input apitypes.UpdateHTTPHealthcheckInput
 	}
 	_, err = c.sendRequest(fmt.Sprintf("/api/v1/healthcheck/http/%s", input.ID), http.MethodPut, payload, &result, nil, TokenAuth)
 	if err != nil {
-		return apitypes.Response{}, err
+		return apitypes.Healthcheck{}, err
 	}
 	return result, nil
 }

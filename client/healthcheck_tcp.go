@@ -16,8 +16,8 @@ func (c *Client) CreateTCPHealthcheck(input apitypes.CreateTCPHealthcheckInput) 
 	return result, nil
 }
 
-func (c *Client) UpdateTCPHealthcheck(input apitypes.UpdateTCPHealthcheckInput) (apitypes.Response, error) {
-	var result apitypes.Response
+func (c *Client) UpdateTCPHealthcheck(input apitypes.UpdateTCPHealthcheckInput) (apitypes.Healthcheck, error) {
+	var result apitypes.Healthcheck
 	internalInput := internalUpdateHealthcheckInput{
 		Name:        input.Name,
 		Description: input.Description,
@@ -31,7 +31,7 @@ func (c *Client) UpdateTCPHealthcheck(input apitypes.UpdateTCPHealthcheckInput) 
 	}
 	_, err = c.sendRequest(fmt.Sprintf("/api/v1/healthcheck/tcp/%s", input.ID), http.MethodPut, payload, &result, nil, TokenAuth)
 	if err != nil {
-		return apitypes.Response{}, err
+		return apitypes.Healthcheck{}, err
 	}
 	return result, nil
 }

@@ -49,7 +49,7 @@ func createAPITokenCmd(client *client.Client) *cobra.Command {
 	exitIfError(err)
 	createAPIToken.PersistentFlags().StringVar(&description, "description", "", "Token description")
 	createAPIToken.PersistentFlags().StringVar(&ttl, "ttl", "72h", "Token TTL")
-	createAPIToken.PersistentFlags().StringSliceVar(&permissions, "permissions", []string{"*"}, "Token permissions")
+	createAPIToken.PersistentFlags().StringSliceVar(&permissions, "permission", []string{"*"}, "Attach a permission to this token.")
 
 	return createAPIToken
 }

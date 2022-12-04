@@ -8,7 +8,6 @@ import (
 
 	"github.com/appclacks/cli/client"
 	apitypes "github.com/appclacks/go-types"
-	"github.com/cheynewallace/tabby"
 	"github.com/spf13/cobra"
 )
 
@@ -69,15 +68,7 @@ func createHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 				fmt.Println(string(json))
 				os.Exit(0)
 			}
-			t := tabby.New()
-			t.AddHeader("ID", "Name", "Description", "Interval", "Timeout", "Labels", "Enabled", "Definition")
-			jsonLabels, err := json.Marshal(healthcheck.Labels)
-			exitIfError(err)
-			jsonDef, err := json.Marshal(healthcheck.Definition)
-			exitIfError(err)
-			t.AddLine(healthcheck.ID, healthcheck.Name, healthcheck.Description, healthcheck.Interval, healthcheck.Timeout, string(jsonLabels), healthcheck.Enabled, string(jsonDef))
-
-			t.Print()
+			printHealthcheckTab([]apitypes.Healthcheck{healthcheck})
 			os.Exit(0)
 		},
 	}
@@ -90,7 +81,7 @@ func createHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 
 	createHTTPHealthcheck.PersistentFlags().StringSliceVar(&labels, "labels", []string{}, "healthchecks labels (example: foo=bar)")
 
-	createHTTPHealthcheck.PersistentFlags().StringVar(&interval, "interval", "60s", "healthcheck interval (examples: 10s, 3m)")
+	createHTTPHealthcheck.PersistentFlags().StringVar(&interval, "interval", "60s", "healthcheck interval (examples: 30s, 3m)")
 
 	createHTTPHealthcheck.PersistentFlags().BoolVar(&enabled, "enabled", true, "Enable the healthcheck on the appclacks platform")
 
@@ -179,13 +170,7 @@ func updateHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 				fmt.Println(string(json))
 				os.Exit(0)
 			}
-			t := tabby.New()
-			t.AddHeader("Messages")
-			for _, message := range result.Messages {
-				t.AddLine(message)
-			}
-
-			t.Print()
+			printHealthcheckTab([]apitypes.Healthcheck{result})
 			os.Exit(0)
 		},
 	}
