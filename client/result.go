@@ -34,6 +34,13 @@ func (c *Client) ListHealthchecksResults(input apitypes.ListHealthchecksResultsI
 	if input.Page != 0 {
 		queryParams["page"] = fmt.Sprintf("%d", input.Page)
 	}
+	if input.Success != nil {
+		if *input.Success {
+			queryParams["success"] = "true"
+		} else {
+			queryParams["success"] = "false"
+		}
+	}
 	_, err = c.sendRequest("/api/v1/result/healthchecks", http.MethodGet, nil, &result, queryParams, TokenAuth)
 	if err != nil {
 		return apitypes.ListHealthchecksResultsOutput{}, err

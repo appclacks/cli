@@ -9,6 +9,7 @@ type ListHealthchecksResultsInput struct {
 	EndDate       time.Time `query:"end-date" validate:"required"`
 	HealthcheckID string    `query:"healthcheck-id" validate:"omitempty,uuid"`
 	Page          int       `query:"page" validate:"omitempty,min=1"`
+	Success       *bool     `query:"success"`
 }
 
 type HealthcheckResult struct {
