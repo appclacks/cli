@@ -17,7 +17,7 @@ func createHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 	var description string
 	var labels []string
 	var interval string
-	var enabled bool
+	var disabled bool
 
 	var validStatus []uint
 	var target string
@@ -46,7 +46,7 @@ func createHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 				Timeout:     timeout,
 				Labels:      labelsMap,
 				Interval:    interval,
-				Enabled:     enabled,
+				Enabled:     !disabled,
 				HealthcheckHTTPDefinition: apitypes.HealthcheckHTTPDefinition{
 					ValidStatus: validStatus,
 					Target:      target,
@@ -83,7 +83,7 @@ func createHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 
 	createHTTPHealthcheck.PersistentFlags().StringVar(&interval, "interval", "60s", "healthcheck interval (examples: 30s, 3m)")
 
-	createHTTPHealthcheck.PersistentFlags().BoolVar(&enabled, "enabled", true, "Enable the healthcheck on the appclacks platform")
+	createHTTPHealthcheck.PersistentFlags().BoolVar(&disabled, "disabled", false, "Disable the healthcheck on the Appclacks platform")
 
 	createHTTPHealthcheck.PersistentFlags().UintSliceVar(&validStatus, "valid-status", []uint{200}, "Expected HTTP response status code")
 
@@ -118,7 +118,7 @@ func updateHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 	var description string
 	var labels []string
 	var interval string
-	var enabled bool
+	var disabled bool
 
 	var validStatus []uint
 	var target string
@@ -148,7 +148,7 @@ func updateHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 				Labels:      labelsMap,
 				Timeout:     timeout,
 				Interval:    interval,
-				Enabled:     enabled,
+				Enabled:     !disabled,
 				HealthcheckHTTPDefinition: apitypes.HealthcheckHTTPDefinition{
 					ValidStatus: validStatus,
 					Target:      target,
@@ -188,7 +188,7 @@ func updateHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 
 	updateHTTPHealthcheck.PersistentFlags().StringVar(&interval, "interval", "60s", "healthcheck interval (examples: 10s, 3m)")
 
-	updateHTTPHealthcheck.PersistentFlags().BoolVar(&enabled, "enabled", true, "Enable the healthcheck on the appclacks platform")
+	updateHTTPHealthcheck.PersistentFlags().BoolVar(&disabled, "disabled", false, "Diasble the healthcheck on the Appclacks platform")
 
 	updateHTTPHealthcheck.PersistentFlags().UintSliceVar(&validStatus, "valid-status", []uint{200}, "Expected HTTP response status code")
 

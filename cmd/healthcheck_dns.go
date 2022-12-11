@@ -16,7 +16,7 @@ func createDNSHealthcheckCmd(client *client.Client) *cobra.Command {
 	var description string
 	var labels []string
 	var interval string
-	var enabled bool
+	var disabled bool
 	var domain string
 	var expectedIPs []string
 
@@ -33,7 +33,7 @@ func createDNSHealthcheckCmd(client *client.Client) *cobra.Command {
 				Labels:      labelsMap,
 				Timeout:     timeout,
 				Interval:    interval,
-				Enabled:     enabled,
+				Enabled:     !disabled,
 				HealthcheckDNSDefinition: apitypes.HealthcheckDNSDefinition{
 					Domain:      domain,
 					ExpectedIPs: expectedIPs,
@@ -64,7 +64,7 @@ func createDNSHealthcheckCmd(client *client.Client) *cobra.Command {
 
 	createDNSHealthcheck.PersistentFlags().StringVar(&timeout, "timeout", "5s", "healthcheck timeout")
 
-	createDNSHealthcheck.PersistentFlags().BoolVar(&enabled, "enabled", true, "Enable the healthcheck on the appclacks platform")
+	createDNSHealthcheck.PersistentFlags().BoolVar(&disabled, "disabled", false, "Disable the healthcheck on the Appclacks platform")
 
 	createDNSHealthcheck.PersistentFlags().StringVar(&domain, "domain", "", "healthcheck domain")
 	err = createDNSHealthcheck.MarkPersistentFlagRequired("domain")
@@ -82,7 +82,7 @@ func updateDNSHealthcheckCmd(client *client.Client) *cobra.Command {
 	var description string
 	var labels []string
 	var interval string
-	var enabled bool
+	var disabled bool
 	var domain string
 	var expectedIPs []string
 
@@ -99,7 +99,7 @@ func updateDNSHealthcheckCmd(client *client.Client) *cobra.Command {
 				Labels:      labelsMap,
 				Timeout:     timeout,
 				Interval:    interval,
-				Enabled:     enabled,
+				Enabled:     !disabled,
 				HealthcheckDNSDefinition: apitypes.HealthcheckDNSDefinition{
 					Domain:      domain,
 					ExpectedIPs: expectedIPs,
@@ -135,7 +135,7 @@ func updateDNSHealthcheckCmd(client *client.Client) *cobra.Command {
 	err = updateDNSHealthcheck.MarkPersistentFlagRequired("interval")
 	exitIfError(err)
 
-	updateDNSHealthcheck.PersistentFlags().BoolVar(&enabled, "enabled", true, "Enable the healthcheck on the appclacks platform")
+	updateDNSHealthcheck.PersistentFlags().BoolVar(&disabled, "disabled", false, "Disable the healthcheck on the Appclacks platform")
 
 	updateDNSHealthcheck.PersistentFlags().StringVar(&domain, "domain", "", "healthcheck domain")
 	err = updateDNSHealthcheck.MarkPersistentFlagRequired("domain")

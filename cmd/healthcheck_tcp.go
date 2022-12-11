@@ -16,7 +16,7 @@ func createTCPHealthcheckCmd(client *client.Client) *cobra.Command {
 	var description string
 	var labels []string
 	var interval string
-	var enabled bool
+	var disabled bool
 
 	var target string
 	var port uint
@@ -35,7 +35,7 @@ func createTCPHealthcheckCmd(client *client.Client) *cobra.Command {
 				Labels:      labelsMap,
 				Timeout:     timeout,
 				Interval:    interval,
-				Enabled:     enabled,
+				Enabled:     !disabled,
 				HealthcheckTCPDefinition: apitypes.HealthcheckTCPDefinition{
 
 					Target: target,
@@ -69,7 +69,7 @@ func createTCPHealthcheckCmd(client *client.Client) *cobra.Command {
 
 	createTCPHealthcheck.PersistentFlags().StringVar(&timeout, "timeout", "5s", "healthcheck timeout")
 
-	createTCPHealthcheck.PersistentFlags().BoolVar(&enabled, "enabled", true, "Enable the healthcheck on the appclacks platform")
+	createTCPHealthcheck.PersistentFlags().BoolVar(&disabled, "disabled", false, "Disable the healthcheck on the Appclacks platform")
 
 	createTCPHealthcheck.PersistentFlags().StringVar(&target, "target", "", "Healthcheck target (ip or domain)")
 	err = createTCPHealthcheck.MarkPersistentFlagRequired("target")
@@ -89,7 +89,7 @@ func updateTCPHealthcheckCmd(client *client.Client) *cobra.Command {
 	var description string
 	var labels []string
 	var interval string
-	var enabled bool
+	var disabled bool
 
 	var target string
 	var port uint
@@ -109,7 +109,7 @@ func updateTCPHealthcheckCmd(client *client.Client) *cobra.Command {
 				Labels:      labelsMap,
 				Timeout:     timeout,
 				Interval:    interval,
-				Enabled:     enabled,
+				Enabled:     !disabled,
 				HealthcheckTCPDefinition: apitypes.HealthcheckTCPDefinition{
 					Target: target,
 
@@ -145,7 +145,7 @@ func updateTCPHealthcheckCmd(client *client.Client) *cobra.Command {
 
 	updateTCPHealthcheck.PersistentFlags().StringVar(&timeout, "timeout", "5s", "healthcheck timeout")
 
-	updateTCPHealthcheck.PersistentFlags().BoolVar(&enabled, "enabled", true, "Enable the healthcheck on the appclacks platform")
+	updateTCPHealthcheck.PersistentFlags().BoolVar(&disabled, "disabled", false, "Disable the healthcheck on the Appclacks platform")
 
 	updateTCPHealthcheck.PersistentFlags().StringVar(&target, "target", "", "Healthcheck target (ip or domain)")
 	err = updateTCPHealthcheck.MarkPersistentFlagRequired("target")

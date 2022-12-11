@@ -16,7 +16,7 @@ func createTLSHealthcheckCmd(client *client.Client) *cobra.Command {
 	var description string
 	var labels []string
 	var interval string
-	var enabled bool
+	var disabled bool
 
 	var target string
 	var port uint
@@ -40,7 +40,7 @@ func createTLSHealthcheckCmd(client *client.Client) *cobra.Command {
 				Labels:      labelsMap,
 				Timeout:     timeout,
 				Interval:    interval,
-				Enabled:     enabled,
+				Enabled:     !disabled,
 				HealthcheckTLSDefinition: apitypes.HealthcheckTLSDefinition{
 
 					Target:          target,
@@ -78,7 +78,7 @@ func createTLSHealthcheckCmd(client *client.Client) *cobra.Command {
 
 	createTLSHealthcheck.PersistentFlags().StringVar(&timeout, "timeout", "5s", "healthcheck timeout")
 
-	createTLSHealthcheck.PersistentFlags().BoolVar(&enabled, "enabled", true, "Enable the healthcheck on the appclacks platform")
+	createTLSHealthcheck.PersistentFlags().BoolVar(&disabled, "disabled", false, "Disable the healthcheck on the Appclacks platform")
 
 	createTLSHealthcheck.PersistentFlags().StringVar(&target, "target", "", "Healthcheck target (ip or domain)")
 	err = createTLSHealthcheck.MarkPersistentFlagRequired("target")
@@ -103,7 +103,7 @@ func updateTLSHealthcheckCmd(client *client.Client) *cobra.Command {
 	var description string
 	var labels []string
 	var interval string
-	var enabled bool
+	var disabled bool
 
 	var target string
 	var port uint
@@ -128,7 +128,7 @@ func updateTLSHealthcheckCmd(client *client.Client) *cobra.Command {
 				Labels:      labelsMap,
 				Timeout:     timeout,
 				Interval:    interval,
-				Enabled:     enabled,
+				Enabled:     !disabled,
 				HealthcheckTLSDefinition: apitypes.HealthcheckTLSDefinition{
 					Target:          target,
 					Key:             key,
@@ -168,7 +168,7 @@ func updateTLSHealthcheckCmd(client *client.Client) *cobra.Command {
 
 	updateTLSHealthcheck.PersistentFlags().StringVar(&timeout, "timeout", "5s", "healthcheck timeout")
 
-	updateTLSHealthcheck.PersistentFlags().BoolVar(&enabled, "enabled", true, "Enable the healthcheck on the appclacks platform")
+	updateTLSHealthcheck.PersistentFlags().BoolVar(&disabled, "disabled", false, "Disable the healthcheck on the appclacks platform")
 
 	updateTLSHealthcheck.PersistentFlags().StringVar(&target, "target", "", "Healthcheck target (ip or domain)")
 	err = updateTLSHealthcheck.MarkPersistentFlagRequired("target")
