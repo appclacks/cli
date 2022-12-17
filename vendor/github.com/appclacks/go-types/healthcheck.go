@@ -96,6 +96,12 @@ func (h *Healthcheck) UnmarshalJSON(data []byte) error {
 			return err
 		}
 		h.Definition = definition
+	} else if internal.Type == "command" {
+		var definition HealthcheckCommandDefinition
+		if err := json.Unmarshal(data, &definition); err != nil {
+			return err
+		}
+		h.Definition = definition
 	} else {
 		return fmt.Errorf("Unknown healthcheck type %s", h.Type)
 	}
@@ -126,12 +132,13 @@ type ListHealthchecksOutput struct {
 
 type CabourotteDiscoveryInput struct {
 	// foo=bar,a=b
-	Labels string `query:"labels,omitempty"`
+	Labels string `query:"labels"`
 }
 
 type CabourotteDiscoveryOutput struct {
-	DNSChecks  []Healthcheck `json:"dns-checks,omitempty"`
-	TCPChecks  []Healthcheck `json:"tcp-checks,omitempty"`
-	HTTPChecks []Healthcheck `json:"http-checks,omitempty"`
-	TLSChecks  []Healthcheck `json:"tls-checks,omitempty"`
+	DNSChecks     []Healthcheck `json:"dns-checks,omitempty"`
+	TCPChecks     []Healthcheck `json:"tcp-checks,omitempty"`
+	HTTPChecks    []Healthcheck `json:"http-checks,omitempty"`
+	TLSChecks     []Healthcheck `json:"tls-checks,omitempty"`
+	CommandChecks []Healthcheck `json:"command-checks,omitempty"`
 }

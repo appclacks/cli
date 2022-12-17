@@ -24,6 +24,7 @@ func (c *Client) UpdateTCPHealthcheck(input apitypes.UpdateTCPHealthcheckInput) 
 		Labels:      input.Labels,
 		Interval:    input.Interval,
 		Enabled:     input.Enabled,
+		Timeout:     input.Timeout,
 	}
 	payload, err := jsonMerge(internalInput, input.HealthcheckTCPDefinition)
 	if err != nil {

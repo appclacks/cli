@@ -194,6 +194,7 @@ func updateHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 
 	updateHTTPHealthcheck.PersistentFlags().StringVar(&target, "target", "", "Healthcheck target (ip or domain)")
 	err = updateHTTPHealthcheck.MarkPersistentFlagRequired("target")
+	exitIfError(err)
 
 	updateHTTPHealthcheck.PersistentFlags().StringVar(&method, "method", "GET", "HTTP method to execute")
 
@@ -210,8 +211,6 @@ func updateHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 	updateHTTPHealthcheck.PersistentFlags().StringVar(&path, "path", "", "Path to use for the healthcheck")
 
 	updateHTTPHealthcheck.PersistentFlags().StringVar(&timeout, "timeout", "5s", "healthcheck timeout")
-
-	exitIfError(err)
 
 	return updateHTTPHealthcheck
 }

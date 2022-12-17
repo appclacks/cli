@@ -33,6 +33,7 @@ func (c *Client) UpdateDNSHealthcheck(input apitypes.UpdateDNSHealthcheckInput) 
 		Labels:      input.Labels,
 		Interval:    input.Interval,
 		Enabled:     input.Enabled,
+		Timeout:     input.Timeout,
 	}
 	payload, err := jsonMerge(internalInput, input.HealthcheckDNSDefinition)
 	if err != nil {

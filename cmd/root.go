@@ -69,6 +69,13 @@ func Execute() error {
 	tls.AddCommand(createTLSHealthcheckCmd(client))
 	tls.AddCommand(updateTLSHealthcheckCmd(client))
 
+	var command = &cobra.Command{
+		Use:   "command",
+		Short: "Manage your Command healthchecks",
+	}
+	command.AddCommand(createCommandHealthcheckCmd(client))
+	command.AddCommand(updateCommandHealthcheckCmd(client))
+
 	var result = &cobra.Command{
 		Use:   "result",
 		Short: "Manage healthchecks results",
@@ -85,6 +92,7 @@ func Execute() error {
 	healthcheck.AddCommand(metrics)
 	healthcheck.AddCommand(result)
 	healthcheck.AddCommand(dns)
+	healthcheck.AddCommand(command)
 	healthcheck.AddCommand(tls)
 	healthcheck.AddCommand(tcp)
 	healthcheck.AddCommand(http)

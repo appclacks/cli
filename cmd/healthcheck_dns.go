@@ -132,8 +132,6 @@ func updateDNSHealthcheckCmd(client *client.Client) *cobra.Command {
 	updateDNSHealthcheck.PersistentFlags().StringSliceVar(&labels, "labels", []string{}, "healthchecks labels (example: foo=bar)")
 
 	updateDNSHealthcheck.PersistentFlags().StringVar(&interval, "interval", "60s", "healthcheck interval (examples: 10s, 3m)")
-	err = updateDNSHealthcheck.MarkPersistentFlagRequired("interval")
-	exitIfError(err)
 
 	updateDNSHealthcheck.PersistentFlags().BoolVar(&disabled, "disabled", false, "Disable the healthcheck on the Appclacks platform")
 
