@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -39,7 +40,9 @@ func createCommandHealthcheckCmd(client *client.Client) *cobra.Command {
 					Arguments: arguments,
 				},
 			}
-			healthcheck, err := client.CreateCommandHealthcheck(payload)
+			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+			defer cancel()
+			healthcheck, err := client.CreateCommandHealthcheck(ctx, payload)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(healthcheck)
@@ -105,7 +108,9 @@ func updateCommandHealthcheckCmd(client *client.Client) *cobra.Command {
 					Arguments: arguments,
 				},
 			}
-			result, err := client.UpdateCommandHealthcheck(payload)
+			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+			defer cancel()
+			result, err := client.UpdateCommandHealthcheck(ctx, payload)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)

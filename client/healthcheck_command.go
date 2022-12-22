@@ -1,22 +1,23 @@
 package client
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
 	apitypes "github.com/appclacks/go-types"
 )
 
-func (c *Client) CreateCommandHealthcheck(input apitypes.CreateCommandHealthcheckInput) (apitypes.Healthcheck, error) {
+func (c *Client) CreateCommandHealthcheck(ctx context.Context, input apitypes.CreateCommandHealthcheckInput) (apitypes.Healthcheck, error) {
 	var result apitypes.Healthcheck
-	_, err := c.sendRequest("/api/v1/healthcheck/command", http.MethodPost, input, &result, nil, TokenAuth)
+	_, err := c.sendRequest(ctx, "/api/v1/healthcheck/command", http.MethodPost, input, &result, nil, TokenAuth)
 	if err != nil {
 		return apitypes.Healthcheck{}, err
 	}
 	return result, nil
 }
 
-func (c *Client) UpdateCommandHealthcheck(input apitypes.UpdateCommandHealthcheckInput) (apitypes.Healthcheck, error) {
+func (c *Client) UpdateCommandHealthcheck(ctx context.Context, input apitypes.UpdateCommandHealthcheckInput) (apitypes.Healthcheck, error) {
 	var result apitypes.Healthcheck
 	internalInput := internalUpdateHealthcheckInput{
 		Name:        input.Name,
@@ -30,7 +31,7 @@ func (c *Client) UpdateCommandHealthcheck(input apitypes.UpdateCommandHealthchec
 	if err != nil {
 		return result, err
 	}
-	_, err = c.sendRequest(fmt.Sprintf("/api/v1/healthcheck/command/%s", input.ID), http.MethodPut, payload, &result, nil, TokenAuth)
+	_, err = c.sendRequest(ctx, fmt.Sprintf("/api/v1/healthcheck/command/%s", input.ID), http.MethodPut, payload, &result, nil, TokenAuth)
 	if err != nil {
 		return apitypes.Healthcheck{}, err
 	}

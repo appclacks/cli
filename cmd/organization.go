@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -35,7 +36,9 @@ func createOrganizationCmd(client *client.Client) *cobra.Command {
 					Email:     accountEmail,
 				},
 			}
-			result, err := client.CreateOrganization(payload)
+			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+			defer cancel()
+			result, err := client.CreateOrganization(ctx, payload)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)

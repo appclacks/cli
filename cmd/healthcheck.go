@@ -1,15 +1,21 @@
 package cmd
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/appclacks/cli/client"
 	apitypes "github.com/appclacks/go-types"
 	"github.com/cheynewallace/tabby"
 	"github.com/spf13/cobra"
+)
+
+const (
+	defaultTimeout = 10 * time.Second
 )
 
 func toMap(slice []string) (map[string]string, error) {
@@ -34,7 +40,9 @@ func getHealthcheckCmd(client *client.Client) *cobra.Command {
 			input := apitypes.GetHealthcheckInput{
 				ID: healthcheckID,
 			}
-			healthcheck, err := client.GetHealthcheck(input)
+			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+			defer cancel()
+			healthcheck, err := client.GetHealthcheck(ctx, input)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(healthcheck)
@@ -62,7 +70,9 @@ func deleteHealthcheckCmd(client *client.Client) *cobra.Command {
 			input := apitypes.DeleteHealthcheckInput{
 				ID: tokenID,
 			}
-			result, err := client.DeleteHealthcheck(input)
+			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+			defer cancel()
+			result, err := client.DeleteHealthcheck(ctx, input)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)
@@ -91,7 +101,9 @@ func listHealthchecksCmd(client *client.Client) *cobra.Command {
 		Use:   "list",
 		Short: "List API healthcheck",
 		Run: func(cmd *cobra.Command, args []string) {
-			result, err := client.ListHealthchecks()
+			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+			defer cancel()
+			result, err := client.ListHealthchecks(ctx)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)

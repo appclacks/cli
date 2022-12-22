@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -52,7 +53,9 @@ func listHealthckecksResultsCmd(client *client.Client) *cobra.Command {
 				Page:          int(page),
 				Success:       success,
 			}
-			result, err := client.ListHealthchecksResults(input)
+			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+			defer cancel()
+			result, err := client.ListHealthchecksResults(ctx, input)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)

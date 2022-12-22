@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -53,7 +54,9 @@ func createTLSHealthcheckCmd(client *client.Client) *cobra.Command {
 					Port:            port,
 				},
 			}
-			healthcheck, err := client.CreateTLSHealthcheck(payload)
+			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+			defer cancel()
+			healthcheck, err := client.CreateTLSHealthcheck(ctx, payload)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(healthcheck)
@@ -140,7 +143,9 @@ func updateTLSHealthcheckCmd(client *client.Client) *cobra.Command {
 					Port:            port,
 				},
 			}
-			result, err := client.UpdateTLSHealthcheck(payload)
+			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+			defer cancel()
+			result, err := client.UpdateTLSHealthcheck(ctx, payload)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)

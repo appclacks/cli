@@ -1,6 +1,7 @@
 package client
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -9,7 +10,7 @@ import (
 	apitypes "github.com/appclacks/go-types"
 )
 
-func (c *Client) ListHealthchecksResults(input apitypes.ListHealthchecksResultsInput) (apitypes.ListHealthchecksResultsOutput, error) {
+func (c *Client) ListHealthchecksResults(ctx context.Context, input apitypes.ListHealthchecksResultsInput) (apitypes.ListHealthchecksResultsOutput, error) {
 	var result apitypes.ListHealthchecksResultsOutput
 	queryParams := make(map[string]string)
 	startBytes, err := json.Marshal(input.StartDate)
@@ -41,7 +42,7 @@ func (c *Client) ListHealthchecksResults(input apitypes.ListHealthchecksResultsI
 			queryParams["success"] = "false"
 		}
 	}
-	_, err = c.sendRequest("/api/v1/result/healthchecks", http.MethodGet, nil, &result, queryParams, TokenAuth)
+	_, err = c.sendRequest(ctx, "/api/v1/result/healthchecks", http.MethodGet, nil, &result, queryParams, TokenAuth)
 	if err != nil {
 		return apitypes.ListHealthchecksResultsOutput{}, err
 	}

@@ -2,6 +2,7 @@ package client
 
 import (
 	"bytes"
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -42,7 +43,7 @@ func New(endpoint string) *Client {
 	}
 }
 
-func (c *Client) sendRequest(url string, method string, body any, result any, queryParams map[string]string, auth AuthMode) (*http.Response, error) {
+func (c *Client) sendRequest(ctx context.Context, url string, method string, body any, result any, queryParams map[string]string, auth AuthMode) (*http.Response, error) {
 	var reqBody io.Reader
 	if body != nil {
 		json, err := json.Marshal(body)
@@ -51,7 +52,8 @@ func (c *Client) sendRequest(url string, method string, body any, result any, qu
 		}
 		reqBody = bytes.NewBuffer(json)
 	}
-	request, err := http.NewRequest(
+	request, err := http.NewRequestWithContext(
+		ctx,
 		method,
 		fmt.Sprintf("%s%s", c.endpoint, url),
 		reqBody)

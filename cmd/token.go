@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -21,6 +22,8 @@ func createAPITokenCmd(client *client.Client) *cobra.Command {
 		Use:   "create",
 		Short: "Create an API token",
 		Run: func(cmd *cobra.Command, args []string) {
+			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+			defer cancel()
 			payload := apitypes.CreateAPITokenInput{
 				Name:        name,
 				Description: description,
@@ -29,7 +32,7 @@ func createAPITokenCmd(client *client.Client) *cobra.Command {
 					Actions: permissions,
 				},
 			}
-			result, err := client.CreateAPIToken(payload)
+			result, err := client.CreateAPIToken(ctx, payload)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)
@@ -59,7 +62,9 @@ func listAPITokensCmd(client *client.Client) *cobra.Command {
 		Use:   "list",
 		Short: "List API tokens",
 		Run: func(cmd *cobra.Command, args []string) {
-			result, err := client.ListAPITokens()
+			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+			defer cancel()
+			result, err := client.ListAPITokens(ctx)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)
@@ -90,7 +95,9 @@ func getAPITokenCmd(client *client.Client) *cobra.Command {
 			input := apitypes.GetAPITokenInput{
 				ID: tokenID,
 			}
-			token, err := client.GetAPIToken(input)
+			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+			defer cancel()
+			token, err := client.GetAPIToken(ctx, input)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(token)
@@ -121,7 +128,9 @@ func deleteAPITokenCmd(client *client.Client) *cobra.Command {
 			input := apitypes.DeleteAPITokenInput{
 				ID: tokenID,
 			}
-			result, err := client.DeleteAPIToken(input)
+			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+			defer cancel()
+			result, err := client.DeleteAPIToken(ctx, input)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)

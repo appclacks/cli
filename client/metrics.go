@@ -1,14 +1,16 @@
 package client
 
 import (
+	"context"
 	"encoding/base64"
 	"fmt"
 	"io"
 	"net/http"
 )
 
-func (c *Client) GetHealthchecksMetrics() (string, error) {
-	request, err := http.NewRequest(
+func (c *Client) GetHealthchecksMetrics(ctx context.Context) (string, error) {
+	request, err := http.NewRequestWithContext(
+		ctx,
 		http.MethodGet,
 		fmt.Sprintf("%s/api/v1/metrics/healthchecks", c.endpoint),
 		nil)

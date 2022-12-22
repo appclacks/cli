@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -44,7 +45,9 @@ func createTCPHealthcheckCmd(client *client.Client) *cobra.Command {
 					ShouldFail: shouldFail,
 				},
 			}
-			healthcheck, err := client.CreateTCPHealthcheck(payload)
+			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+			defer cancel()
+			healthcheck, err := client.CreateTCPHealthcheck(ctx, payload)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(healthcheck)
@@ -117,7 +120,9 @@ func updateTCPHealthcheckCmd(client *client.Client) *cobra.Command {
 					ShouldFail: shouldFail,
 				},
 			}
-			result, err := client.UpdateTCPHealthcheck(payload)
+			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+			defer cancel()
+			result, err := client.UpdateTCPHealthcheck(ctx, payload)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)

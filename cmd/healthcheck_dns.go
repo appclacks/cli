@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -39,7 +40,9 @@ func createDNSHealthcheckCmd(client *client.Client) *cobra.Command {
 					ExpectedIPs: expectedIPs,
 				},
 			}
-			healthcheck, err := client.CreateDNSHealthcheck(payload)
+			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+			defer cancel()
+			healthcheck, err := client.CreateDNSHealthcheck(ctx, payload)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(healthcheck)
@@ -105,7 +108,9 @@ func updateDNSHealthcheckCmd(client *client.Client) *cobra.Command {
 					ExpectedIPs: expectedIPs,
 				},
 			}
-			result, err := client.UpdateDNSHealthcheck(payload)
+			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+			defer cancel()
+			result, err := client.UpdateDNSHealthcheck(ctx, payload)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)

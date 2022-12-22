@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -13,7 +14,9 @@ func getHealthchecksMetricsCmd(client *client.Client) *cobra.Command {
 		Use:   "get",
 		Short: "Get healthchecks metrics in Prometheus format",
 		Run: func(cmd *cobra.Command, args []string) {
-			metrics, err := client.GetHealthchecksMetrics()
+			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+			defer cancel()
+			metrics, err := client.GetHealthchecksMetrics(ctx)
 			exitIfError(err)
 			fmt.Print(metrics)
 			os.Exit(0)

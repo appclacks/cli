@@ -1,15 +1,16 @@
 package client
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
 	apitypes "github.com/appclacks/go-types"
 )
 
-func (c *Client) CreateDNSHealthcheck(input apitypes.CreateDNSHealthcheckInput) (apitypes.Healthcheck, error) {
+func (c *Client) CreateDNSHealthcheck(ctx context.Context, input apitypes.CreateDNSHealthcheckInput) (apitypes.Healthcheck, error) {
 	var result apitypes.Healthcheck
-	_, err := c.sendRequest("/api/v1/healthcheck/dns", http.MethodPost, input, &result, nil, TokenAuth)
+	_, err := c.sendRequest(ctx, "/api/v1/healthcheck/dns", http.MethodPost, input, &result, nil, TokenAuth)
 	if err != nil {
 		return apitypes.Healthcheck{}, err
 	}
@@ -25,7 +26,7 @@ type internalUpdateHealthcheckInput struct {
 	Timeout     string            `json:"timeout"`
 }
 
-func (c *Client) UpdateDNSHealthcheck(input apitypes.UpdateDNSHealthcheckInput) (apitypes.Healthcheck, error) {
+func (c *Client) UpdateDNSHealthcheck(ctx context.Context, input apitypes.UpdateDNSHealthcheckInput) (apitypes.Healthcheck, error) {
 	var result apitypes.Healthcheck
 	internalInput := internalUpdateHealthcheckInput{
 		Name:        input.Name,
@@ -39,7 +40,7 @@ func (c *Client) UpdateDNSHealthcheck(input apitypes.UpdateDNSHealthcheckInput) 
 	if err != nil {
 		return result, err
 	}
-	_, err = c.sendRequest(fmt.Sprintf("/api/v1/healthcheck/dns/%s", input.ID), http.MethodPut, payload, &result, nil, TokenAuth)
+	_, err = c.sendRequest(ctx, fmt.Sprintf("/api/v1/healthcheck/dns/%s", input.ID), http.MethodPut, payload, &result, nil, TokenAuth)
 	if err != nil {
 		return apitypes.Healthcheck{}, err
 	}
