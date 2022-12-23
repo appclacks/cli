@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -25,6 +26,10 @@ type AuthMode string
 const TokenAuth AuthMode = "token"
 const PasswordAuth AuthMode = "password"
 const NoAuth AuthMode = "none"
+
+var (
+	ErrNotFound = errors.New("Not found")
+)
 
 func New(endpoint string) *Client {
 	orgID := os.Getenv("APPCLACKS_ORGANIZATION_ID")
@@ -89,6 +94,9 @@ func (c *Client) sendRequest(ctx context.Context, url string, method string, bod
 	}
 	defer response.Body.Close()
 	if response.StatusCode >= 400 {
+		if response.StatusCode == 404 {
+			return nil, ErrNotFound
+		}
 		return nil, fmt.Errorf("The API returned an error: status %d\n%s", response.StatusCode, string(b))
 	}
 	if result != nil {
