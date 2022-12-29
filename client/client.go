@@ -31,21 +31,83 @@ var (
 	ErrNotFound = errors.New("Not found")
 )
 
-func New(endpoint string) *Client {
-	orgID := os.Getenv("APPCLACKS_ORGANIZATION_ID")
-	token := os.Getenv("APPCLACKS_TOKEN")
+type CustomAuth func(*Client)
+type WithTokenOpts func(*Client)
+type WithUserPasswordOpts func(*Client)
 
-	accountEmail := os.Getenv("APPCLACKS_ACCOUNT_EMAIL")
-	accountPassword := os.Getenv("APPCLACKS_ACCOUNT_PASSWORD")
-
-	return &Client{
-		http:            &http.Client{},
-		endpoint:        endpoint,
-		orgID:           orgID,
-		accountEmail:    accountEmail,
-		token:           token,
-		accountPassword: accountPassword,
+func WithToken(opts ...WithTokenOpts) CustomAuth {
+	return func(config *Client) {
+		for _, opt := range opts {
+			opt(config)
+		}
 	}
+}
+
+func OrganizationID(orgID string) WithTokenOpts {
+	return func(c *Client) {
+		c.orgID = orgID
+	}
+}
+
+func Token(token string) WithTokenOpts {
+	return func(c *Client) {
+		c.token = token
+	}
+}
+
+func WithUserPassword(opts ...WithUserPasswordOpts) CustomAuth {
+	return func(config *Client) {
+		for _, opt := range opts {
+			opt(config)
+		}
+	}
+}
+
+func AccountEmail(email string) WithUserPasswordOpts {
+	return func(c *Client) {
+		c.accountEmail = email
+	}
+}
+
+func AccountPassword(password string) WithUserPasswordOpts {
+	return func(c *Client) {
+		c.accountPassword = password
+	}
+}
+
+func loadEnv(client *Client) {
+	if os.Getenv("APPCLACKS_ORGANIZATION_ID") != "" {
+		client.orgID = os.Getenv("APPCLACKS_ORGANIZATION_ID")
+	}
+
+	if os.Getenv("APPCLACKS_TOKEN") != "" {
+		client.token = os.Getenv("APPCLACKS_TOKEN")
+	}
+
+	if os.Getenv("APPCLACKS_ACCOUNT_EMAIL") != "" {
+		client.accountEmail = os.Getenv("APPCLACKS_ACCOUNT_EMAIL")
+	}
+
+	if os.Getenv("APPCLACKS_ACCOUNT_PASSWORD") != "" {
+		client.accountPassword = os.Getenv("APPCLACKS_ACCOUNT_PASSWORD")
+	}
+}
+
+func New(endpoint string, customAuth ...CustomAuth) *Client {
+
+	client := &Client{
+		http:     &http.Client{},
+		endpoint: endpoint,
+	}
+
+	for _, auth := range customAuth {
+		auth(client)
+	}
+
+	loadEnv(client)
+
+	return client
+
 }
 
 func (c *Client) sendRequest(ctx context.Context, url string, method string, body any, result any, queryParams map[string]string, auth AuthMode) (*http.Response, error) {
