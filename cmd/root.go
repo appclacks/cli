@@ -19,6 +19,13 @@ func Execute() error {
 		Short: "Manage your organization",
 	}
 	organization.AddCommand(createOrganizationCmd(client))
+	// account
+
+	var account = &cobra.Command{
+		Use:   "account",
+		Short: "Manage your account",
+	}
+	account.AddCommand(getAccountOrganizationCmd(client))
 
 	// token
 
@@ -98,6 +105,7 @@ func Execute() error {
 	healthcheck.AddCommand(http)
 
 	rootCmd.AddCommand(organization)
+	rootCmd.AddCommand(account)
 	rootCmd.AddCommand(token)
 	rootCmd.AddCommand(healthcheck)
 

@@ -16,6 +16,7 @@ func (c *Client) CreateAPIToken(ctx context.Context, payload apitypes.CreateAPIT
 	}
 	return result, nil
 }
+
 func (c *Client) ListAPITokens(ctx context.Context) (apitypes.ListAPITokensOutput, error) {
 	var result apitypes.ListAPITokensOutput
 	_, err := c.sendRequest(ctx, "/api/v1/token", http.MethodGet, nil, &result, nil, TokenAuth)

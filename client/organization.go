@@ -15,3 +15,12 @@ func (c *Client) CreateOrganization(ctx context.Context, payload apitypes.Create
 	}
 	return result, nil
 }
+
+func (c *Client) GetOrganizationForAccount(ctx context.Context) (apitypes.Organization, error) {
+	var result apitypes.Organization
+	_, err := c.sendRequest(ctx, "/app/v1/organization", http.MethodGet, nil, &result, nil, PasswordAuth)
+	if err != nil {
+		return apitypes.Organization{}, err
+	}
+	return result, nil
+}
