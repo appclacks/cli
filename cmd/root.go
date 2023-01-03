@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/appclacks/cli/client"
+	"github.com/appclacks/cli/cmd/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -19,6 +20,19 @@ func Execute() error {
 		Short: "Manage your organization",
 	}
 	organization.AddCommand(createOrganizationCmd(client))
+
+	// ui
+
+	var ui = &cobra.Command{
+		Use:   "ui",
+		Short: "Launch Appclacks terminal user interface",
+		Run: func(cmd *cobra.Command, args []string) {
+			err := ui.Launch(client)
+			exitIfError(err)
+
+		},
+	}
+
 	// account
 
 	var account = &cobra.Command{
@@ -104,6 +118,7 @@ func Execute() error {
 	healthcheck.AddCommand(tcp)
 	healthcheck.AddCommand(http)
 
+	rootCmd.AddCommand(ui)
 	rootCmd.AddCommand(organization)
 	rootCmd.AddCommand(account)
 	rootCmd.AddCommand(token)
