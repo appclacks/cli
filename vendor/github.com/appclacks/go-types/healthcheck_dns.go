@@ -2,7 +2,7 @@ package types
 
 type HealthcheckDNSDefinition struct {
 	Domain      string   `json:"domain,omitempty" description:"Domain to check" validate:"required,max=255,min=1"`
-	ExpectedIPs []string `json:"expected-ips,omitempty" description:"Domain to check" validate:"max=10,dive,ip_addr"`
+	ExpectedIPs []string `json:"expected-ips,omitempty" description:"Expected IP addresses in the answer" validate:"max=10,dive,ip_addr"`
 }
 
 type CreateDNSHealthcheckInput struct {

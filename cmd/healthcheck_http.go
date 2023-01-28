@@ -28,6 +28,7 @@ func createHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 	var body string
 	var bodyRegexp []string
 	var headers []string
+	var query []string
 	var protocol string
 	var path string
 
@@ -40,6 +41,8 @@ func createHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 			headersMap, err := toMap(headers)
 			exitIfError(err)
 			formattedMethod := strings.ToUpper(method)
+			queryMap, err := toMap(query)
+			exitIfError(err)
 
 			payload := apitypes.CreateHTTPHealthcheckInput{
 				Name:        name,
@@ -53,6 +56,7 @@ func createHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 					Target:      target,
 					Method:      formattedMethod,
 					Port:        port,
+					Query:       queryMap,
 					Redirect:    redirect,
 					Body:        body,
 					BodyRegexp:  bodyRegexp,
@@ -109,6 +113,10 @@ func createHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 
 	createHTTPHealthcheck.PersistentFlags().StringVar(&timeout, "timeout", "5s", "healthcheck timeout")
 
+	createHTTPHealthcheck.PersistentFlags().StringSliceVar(&headers, "headers", []string{}, "healthchecks http headers (example: foo=bar)")
+
+	createHTTPHealthcheck.PersistentFlags().StringSliceVar(&query, "query", []string{}, "healthchecks http query params (example: foo=bar)")
+
 	exitIfError(err)
 
 	return createHTTPHealthcheck
@@ -131,6 +139,7 @@ func updateHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 	var body string
 	var bodyRegexp []string
 	var headers []string
+	var query []string
 	var protocol string
 	var path string
 
@@ -143,6 +152,8 @@ func updateHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 			headersMap, err := toMap(headers)
 			exitIfError(err)
 			formattedMethod := strings.ToUpper(method)
+			queryMap, err := toMap(query)
+			exitIfError(err)
 
 			payload := apitypes.UpdateHTTPHealthcheckInput{
 				ID:          id,
@@ -159,6 +170,7 @@ func updateHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 					Port:        port,
 					Redirect:    redirect,
 					Body:        body,
+					Query:       queryMap,
 					BodyRegexp:  bodyRegexp,
 					Headers:     headersMap,
 					Protocol:    protocol,
@@ -216,6 +228,10 @@ func updateHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 	updateHTTPHealthcheck.PersistentFlags().StringVar(&path, "path", "", "Path to use for the healthcheck")
 
 	updateHTTPHealthcheck.PersistentFlags().StringVar(&timeout, "timeout", "5s", "healthcheck timeout")
+
+	updateHTTPHealthcheck.PersistentFlags().StringSliceVar(&headers, "headers", []string{}, "healthchecks http headers (example: foo=bar)")
+
+	updateHTTPHealthcheck.PersistentFlags().StringSliceVar(&query, "query", []string{}, "healthchecks http query params (example: foo=bar)")
 
 	return updateHTTPHealthcheck
 }

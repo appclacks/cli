@@ -6,9 +6,10 @@ type HealthcheckHTTPDefinition struct {
 	Method      string            `json:"method" validate:"required,oneof=GET POST PUT DELETE HEAD"`
 	Port        uint              `json:"port" validate:"required,max=65535,min=1"`
 	Redirect    bool              `json:"redirect"`
+	Query       map[string]string `json:"query,omitempty" validate:"max=20"`
 	Body        string            `json:"body,omitempty"`
 	BodyRegexp  []string          `json:"body-regexp,omitempty" validate:"max=3"`
-	Headers     map[string]string `json:"headers,omitempty" validate:"max=5"`
+	Headers     map[string]string `json:"headers,omitempty" validate:"max=20"`
 	Protocol    string            `json:"protocol" validate:"oneof=http https"`
 	Path        string            `json:"path,omitempty"`
 	Key         string            `json:"key,omitempty"`
