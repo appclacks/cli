@@ -9,13 +9,13 @@ type Permissions struct {
 }
 
 type APIToken struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Token       string `json:"token"`
-	Description string `json:"description"`
-	Permissions Permissions
-	CreatedAt   time.Time `json:"created-at"`
-	TTL         string    `json:"ttl"`
+	ID          string      `json:"id"`
+	Name        string      `json:"name"`
+	Token       string      `json:"token"`
+	Description string      `json:"description"`
+	Permissions Permissions `json:"permissions"`
+	CreatedAt   time.Time   `json:"created-at"`
+	TTL         string      `json:"ttl"`
 }
 
 type CreateAPITokenInput struct {
