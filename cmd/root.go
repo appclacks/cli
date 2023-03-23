@@ -12,7 +12,7 @@ func Execute() error {
 		Use:   "appclacks",
 		Short: "AppClacks CLI",
 	}
-	rootCmd.PersistentFlags().StringVar(&outputFormat, "output", "table", "Command output format (table or json)")
+	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output", "o", "table", "Command output format (table or json)")
 	client := client.New("https://api.appclacks.com")
 	var organization = &cobra.Command{
 		Use:   "organization",
