@@ -1,6 +1,6 @@
 module github.com/appclacks/cli
 
-go 1.19
+go 1.20
 
 require (
 	github.com/appclacks/go-types v0.0.0-20230320225037-3fe7d9cd3abb
