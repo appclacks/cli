@@ -33,3 +33,16 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
+
+brews:
+  - tap:
+      owner: appclacks
+      name: homebrew-tap
+    name: appclacks
+    folder: Formula
+    homepage: https://appclacks.com
+    skip_upload: auto
+    test: |
+      system "#{bin}/appclacks --help"
+    install: |
+      bin.install "appclacks"
