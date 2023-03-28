@@ -6,12 +6,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/appclacks/cli/client"
 	apitypes "github.com/appclacks/go-types"
 	"github.com/spf13/cobra"
 )
 
-func createCommandHealthcheckCmd(client *client.Client) *cobra.Command {
+func createCommandHealthcheckCmd() *cobra.Command {
 	var name string
 	var timeout string
 	var description string
@@ -25,9 +24,9 @@ func createCommandHealthcheckCmd(client *client.Client) *cobra.Command {
 		Use:   "create",
 		Short: "Create a command healthcheck",
 		Run: func(cmd *cobra.Command, args []string) {
+			client := buildClient()
 			labelsMap, err := toMap(labels)
 			exitIfError(err)
-
 			payload := apitypes.CreateCommandHealthcheckInput{
 				Name:        name,
 				Description: description,
@@ -78,7 +77,7 @@ func createCommandHealthcheckCmd(client *client.Client) *cobra.Command {
 	return createCommandHealthcheck
 }
 
-func updateCommandHealthcheckCmd(client *client.Client) *cobra.Command {
+func updateCommandHealthcheckCmd() *cobra.Command {
 	var id string
 	var timeout string
 	var name string
@@ -93,6 +92,7 @@ func updateCommandHealthcheckCmd(client *client.Client) *cobra.Command {
 		Use:   "update",
 		Short: "Update a command healthcheck",
 		Run: func(cmd *cobra.Command, args []string) {
+			client := buildClient()
 			labelsMap, err := toMap(labels)
 			exitIfError(err)
 			payload := apitypes.UpdateCommandHealthcheckInput{

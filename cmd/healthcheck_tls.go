@@ -6,12 +6,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/appclacks/cli/client"
 	apitypes "github.com/appclacks/go-types"
 	"github.com/spf13/cobra"
 )
 
-func createTLSHealthcheckCmd(client *client.Client) *cobra.Command {
+func createTLSHealthcheckCmd() *cobra.Command {
 	var name string
 	var timeout string
 	var description string
@@ -32,6 +31,7 @@ func createTLSHealthcheckCmd(client *client.Client) *cobra.Command {
 		Use:   "create",
 		Short: "Create a TLS healthcheck",
 		Run: func(cmd *cobra.Command, args []string) {
+			client := buildClient()
 			labelsMap, err := toMap(labels)
 			exitIfError(err)
 
@@ -99,7 +99,7 @@ func createTLSHealthcheckCmd(client *client.Client) *cobra.Command {
 	return createTLSHealthcheck
 }
 
-func updateTLSHealthcheckCmd(client *client.Client) *cobra.Command {
+func updateTLSHealthcheckCmd() *cobra.Command {
 	var id string
 	var name string
 	var timeout string
@@ -121,6 +121,7 @@ func updateTLSHealthcheckCmd(client *client.Client) *cobra.Command {
 		Use:   "update",
 		Short: "Update a TLS healthcheck",
 		Run: func(cmd *cobra.Command, args []string) {
+			client := buildClient()
 			labelsMap, err := toMap(labels)
 			exitIfError(err)
 

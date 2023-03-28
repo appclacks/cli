@@ -6,17 +6,16 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/appclacks/cli/client"
 	"github.com/cheynewallace/tabby"
 	"github.com/spf13/cobra"
 )
 
-func getAccountOrganizationCmd(client *client.Client) *cobra.Command {
+func getAccountOrganizationCmd() *cobra.Command {
 	var getAccountOrganization = &cobra.Command{
 		Use:   "organization",
 		Short: "Get the organization for the configured account (email and password)",
 		Run: func(cmd *cobra.Command, args []string) {
-
+			client := buildClient()
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
 			result, err := client.GetOrganizationForAccount(ctx)

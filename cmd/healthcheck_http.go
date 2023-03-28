@@ -7,12 +7,11 @@ import (
 	"os"
 	"strings"
 
-	"github.com/appclacks/cli/client"
 	apitypes "github.com/appclacks/go-types"
 	"github.com/spf13/cobra"
 )
 
-func createHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
+func createHTTPHealthcheckCmd() *cobra.Command {
 	var name string
 	var timeout string
 	var description string
@@ -36,6 +35,7 @@ func createHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 		Use:   "create",
 		Short: "Create a HTTP healthcheck",
 		Run: func(cmd *cobra.Command, args []string) {
+			client := buildClient()
 			labelsMap, err := toMap(labels)
 			exitIfError(err)
 			headersMap, err := toMap(headers)
@@ -122,7 +122,7 @@ func createHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 	return createHTTPHealthcheck
 }
 
-func updateHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
+func updateHTTPHealthcheckCmd() *cobra.Command {
 	var id string
 	var timeout string
 	var name string
@@ -147,6 +147,7 @@ func updateHTTPHealthcheckCmd(client *client.Client) *cobra.Command {
 		Use:   "update",
 		Short: "Update a HTTP healthcheck",
 		Run: func(cmd *cobra.Command, args []string) {
+			client := buildClient()
 			labelsMap, err := toMap(labels)
 			exitIfError(err)
 			headersMap, err := toMap(headers)
