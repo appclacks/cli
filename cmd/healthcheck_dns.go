@@ -6,12 +6,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/appclacks/cli/client"
 	apitypes "github.com/appclacks/go-types"
 	"github.com/spf13/cobra"
 )
 
-func createDNSHealthcheckCmd(client *client.Client) *cobra.Command {
+func createDNSHealthcheckCmd() *cobra.Command {
 	var name string
 	var timeout string
 	var description string
@@ -25,6 +24,7 @@ func createDNSHealthcheckCmd(client *client.Client) *cobra.Command {
 		Use:   "create",
 		Short: "Create a DNS healthcheck",
 		Run: func(cmd *cobra.Command, args []string) {
+			client := buildClient()
 			labelsMap, err := toMap(labels)
 			exitIfError(err)
 
@@ -78,7 +78,7 @@ func createDNSHealthcheckCmd(client *client.Client) *cobra.Command {
 	return createDNSHealthcheck
 }
 
-func updateDNSHealthcheckCmd(client *client.Client) *cobra.Command {
+func updateDNSHealthcheckCmd() *cobra.Command {
 	var id string
 	var timeout string
 	var name string
@@ -93,6 +93,7 @@ func updateDNSHealthcheckCmd(client *client.Client) *cobra.Command {
 		Use:   "update",
 		Short: "Update a DNS healthcheck",
 		Run: func(cmd *cobra.Command, args []string) {
+			client := buildClient()
 			labelsMap, err := toMap(labels)
 			exitIfError(err)
 			payload := apitypes.UpdateDNSHealthcheckInput{

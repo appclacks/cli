@@ -8,7 +8,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/appclacks/cli/client"
 	apitypes "github.com/appclacks/go-types"
 	"github.com/cheynewallace/tabby"
 	"github.com/spf13/cobra"
@@ -31,12 +30,13 @@ func toMap(slice []string) (map[string]string, error) {
 
 }
 
-func getHealthcheckCmd(client *client.Client) *cobra.Command {
+func getHealthcheckCmd() *cobra.Command {
 	var healthcheckID string
 	var getHealthcheck = &cobra.Command{
 		Use:   "get",
 		Short: "Get an API healthcheck",
 		Run: func(cmd *cobra.Command, args []string) {
+			client := buildClient()
 			input := apitypes.GetHealthcheckInput{
 				ID: healthcheckID,
 			}
@@ -61,12 +61,13 @@ func getHealthcheckCmd(client *client.Client) *cobra.Command {
 	return getHealthcheck
 }
 
-func deleteHealthcheckCmd(client *client.Client) *cobra.Command {
+func deleteHealthcheckCmd() *cobra.Command {
 	var tokenID string
 	var deleteHealthcheck = &cobra.Command{
 		Use:   "delete",
 		Short: "Delete an healthcheck",
 		Run: func(cmd *cobra.Command, args []string) {
+			client := buildClient()
 			input := apitypes.DeleteHealthcheckInput{
 				ID: tokenID,
 			}
@@ -96,11 +97,12 @@ func deleteHealthcheckCmd(client *client.Client) *cobra.Command {
 	return deleteHealthcheck
 }
 
-func listHealthchecksCmd(client *client.Client) *cobra.Command {
+func listHealthchecksCmd() *cobra.Command {
 	var listHealthchecks = &cobra.Command{
 		Use:   "list",
 		Short: "List API healthcheck",
 		Run: func(cmd *cobra.Command, args []string) {
+			client := buildClient()
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
 			result, err := client.ListHealthchecks(ctx)

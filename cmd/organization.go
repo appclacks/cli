@@ -6,13 +6,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/appclacks/cli/client"
 	apitypes "github.com/appclacks/go-types"
 	"github.com/cheynewallace/tabby"
 	"github.com/spf13/cobra"
 )
 
-func createOrganizationCmd(client *client.Client) *cobra.Command {
+func createOrganizationCmd() *cobra.Command {
 	var orgName string
 	var orgDescription string
 	var accountFirstName string
@@ -24,6 +23,7 @@ func createOrganizationCmd(client *client.Client) *cobra.Command {
 		Use:   "create",
 		Short: "Create an organization",
 		Run: func(cmd *cobra.Command, args []string) {
+			client := buildClient()
 			payload := apitypes.CreateOrganizationInput{
 				Organization: apitypes.CreateOrganizationOrg{
 					Name:        orgName,

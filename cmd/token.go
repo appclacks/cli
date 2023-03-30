@@ -6,13 +6,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/appclacks/cli/client"
 	apitypes "github.com/appclacks/go-types"
 	"github.com/cheynewallace/tabby"
 	"github.com/spf13/cobra"
 )
 
-func createAPITokenCmd(client *client.Client) *cobra.Command {
+func createAPITokenCmd() *cobra.Command {
 	var name string
 	var description string
 	var ttl string
@@ -22,6 +21,7 @@ func createAPITokenCmd(client *client.Client) *cobra.Command {
 		Use:   "create",
 		Short: "Create an API token",
 		Run: func(cmd *cobra.Command, args []string) {
+			client := buildClient()
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
 			payload := apitypes.CreateAPITokenInput{
@@ -57,11 +57,12 @@ func createAPITokenCmd(client *client.Client) *cobra.Command {
 	return createAPIToken
 }
 
-func listAPITokensCmd(client *client.Client) *cobra.Command {
+func listAPITokensCmd() *cobra.Command {
 	var listAPITokens = &cobra.Command{
 		Use:   "list",
 		Short: "List API tokens",
 		Run: func(cmd *cobra.Command, args []string) {
+			client := buildClient()
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
 			result, err := client.ListAPITokens(ctx)
@@ -86,12 +87,13 @@ func listAPITokensCmd(client *client.Client) *cobra.Command {
 	return listAPITokens
 }
 
-func getAPITokenCmd(client *client.Client) *cobra.Command {
+func getAPITokenCmd() *cobra.Command {
 	var tokenID string
 	var getAPIToken = &cobra.Command{
 		Use:   "get",
 		Short: "Get an API token",
 		Run: func(cmd *cobra.Command, args []string) {
+			client := buildClient()
 			input := apitypes.GetAPITokenInput{
 				ID: tokenID,
 			}
@@ -119,12 +121,13 @@ func getAPITokenCmd(client *client.Client) *cobra.Command {
 	return getAPIToken
 }
 
-func deleteAPITokenCmd(client *client.Client) *cobra.Command {
+func deleteAPITokenCmd() *cobra.Command {
 	var tokenID string
 	var deleteAPIToken = &cobra.Command{
 		Use:   "delete",
 		Short: "Delete an API token",
 		Run: func(cmd *cobra.Command, args []string) {
+			client := buildClient()
 			input := apitypes.DeleteAPITokenInput{
 				ID: tokenID,
 			}

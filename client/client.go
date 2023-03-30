@@ -19,6 +19,7 @@ type Client struct {
 	accountEmail    string
 	token           string
 	accountPassword string
+	profile         string
 }
 
 type AuthMode string
@@ -40,6 +41,12 @@ func WithToken(opts ...WithTokenOpts) CustomAuth {
 		for _, opt := range opts {
 			opt(config)
 		}
+	}
+}
+
+func WithProfile(profile string) CustomAuth {
+	return func(config *Client) {
+		config.profile = profile
 	}
 }
 
@@ -91,9 +98,42 @@ func loadEnv(client *Client) {
 	if os.Getenv("APPCLACKS_ACCOUNT_PASSWORD") != "" {
 		client.accountPassword = os.Getenv("APPCLACKS_ACCOUNT_PASSWORD")
 	}
+
+	if os.Getenv("APPCLACKS_PROFILE") != "" {
+		client.profile = os.Getenv("APPCLACKS_PROFILE")
+	}
 }
 
-func New(endpoint string, customAuth ...CustomAuth) *Client {
+func loadConfigFile(client *Client) error {
+	configPath, err := GetConfigFilePath()
+	if err != nil {
+		return err
+	}
+	config, err := ReadConfig(configPath)
+	if err != nil {
+		return err
+	}
+	if len(config.Profiles) == 0 {
+		return fmt.Errorf("The configuration file %s is empty", configPath)
+	}
+	profile := client.profile
+	if profile == "" {
+		profile = config.DefaultProfile
+	}
+	if profile == "" {
+		return fmt.Errorf("No profile selected and no default profile specified in the configuration file %s", configPath)
+	}
+	configProfile, ok := config.Profiles[profile]
+	if !ok {
+		return fmt.Errorf("Profile %s not found in the configuration file %s", profile, configPath)
+	}
+
+	client.orgID = configProfile.OrganizationID
+	client.token = configProfile.APIToken
+	return nil
+}
+
+func New(endpoint string, customAuth ...CustomAuth) (*Client, error) {
 
 	client := &Client{
 		http:     &http.Client{},
@@ -106,7 +146,14 @@ func New(endpoint string, customAuth ...CustomAuth) *Client {
 
 	loadEnv(client)
 
-	return client
+	if client.accountEmail == "" && client.accountPassword == "" && client.token == "" && client.orgID == "" {
+		err := loadConfigFile(client)
+		if err != nil {
+			return nil, fmt.Errorf("No authentication variables defined and error while loading the Appclacks configuration file: %w", err)
+		}
+	}
+
+	return client, nil
 
 }
 

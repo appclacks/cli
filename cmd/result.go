@@ -7,13 +7,12 @@ import (
 	"os"
 	"time"
 
-	"github.com/appclacks/cli/client"
 	apitypes "github.com/appclacks/go-types"
 	"github.com/cheynewallace/tabby"
 	"github.com/spf13/cobra"
 )
 
-func listHealthckecksResultsCmd(client *client.Client) *cobra.Command {
+func listHealthckecksResultsCmd() *cobra.Command {
 	var startDate string
 	var endDate string
 	var healthcheckID string
@@ -25,7 +24,7 @@ func listHealthckecksResultsCmd(client *client.Client) *cobra.Command {
 		Use:   "list",
 		Short: "List healthchecks results",
 		Run: func(cmd *cobra.Command, args []string) {
-
+			client := buildClient()
 			var err error
 			start := time.Now().UTC().Add(-5 * time.Minute)
 			if startDate != "" {
