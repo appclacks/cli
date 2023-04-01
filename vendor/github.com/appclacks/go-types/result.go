@@ -20,6 +20,7 @@ type HealthcheckResult struct {
 	Summary       string            `json:"summary"`
 	Message       string            `json:"message"`
 	HealthcheckID string            `json:"healthcheck-id"`
+	Duration      int64             `json:"duration"`
 }
 
 type ListHealthchecksResultsOutput struct {

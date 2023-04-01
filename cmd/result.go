@@ -63,12 +63,12 @@ func listHealthckecksResultsCmd() *cobra.Command {
 				os.Exit(0)
 			}
 			t := tabby.New()
-			t.AddHeader("ID", "Created At", "Success", "Summary", "Message", "Healthcheck ID", "Labels")
+			t.AddHeader("ID", "Created At", "Success", "Duration (ms)", "Summary", "Message", "Healthcheck ID", "Labels")
 			for i := len(result.Result) - 1; i >= 0; i-- {
 				result := result.Result[i]
 				jsonLabels, err := json.Marshal(result.Labels)
 				exitIfError(err)
-				t.AddLine(result.ID, result.CreatedAt, result.Success, result.Summary, result.Message, result.HealthcheckID, string(jsonLabels))
+				t.AddLine(result.ID, result.CreatedAt, result.Success, result.Duration, result.Summary, result.Message, result.HealthcheckID, string(jsonLabels))
 			}
 			t.Print()
 			os.Exit(0)
