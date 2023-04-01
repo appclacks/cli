@@ -41,8 +41,8 @@ func createAPITokenCmd() *cobra.Command {
 				os.Exit(0)
 			}
 			t := tabby.New()
-			t.AddHeader("ID", "Name", "Token", "Description", "TTL", "Permissions")
-			t.AddLine(result.ID, result.Name, result.Token, result.Description, result.TTL, result.Permissions.Actions)
+			t.AddHeader("ID", "Name", "Token", "Description", "Expires at", "Permissions")
+			t.AddLine(result.ID, result.Name, result.Token, result.Description, result.ExpiresAt, result.Permissions.Actions)
 			t.Print()
 			os.Exit(0)
 		},
