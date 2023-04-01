@@ -15,6 +15,7 @@ type APIToken struct {
 	Description string      `json:"description"`
 	Permissions Permissions `json:"permissions"`
 	CreatedAt   time.Time   `json:"created-at"`
+	ExpiresAt   time.Time   `json:"expires-at"`
 	TTL         string      `json:"ttl"`
 }
 
