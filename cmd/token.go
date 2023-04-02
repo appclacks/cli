@@ -41,8 +41,8 @@ func createAPITokenCmd() *cobra.Command {
 				os.Exit(0)
 			}
 			t := tabby.New()
-			t.AddHeader("ID", "Name", "Token", "Description", "Expires at", "Permissions")
-			t.AddLine(result.ID, result.Name, result.Token, result.Description, result.ExpiresAt, result.Permissions.Actions)
+			t.AddHeader("ID", "Name", "Token", "Expires at", "Description", "Permissions")
+			t.AddLine(result.ID, result.Name, result.Token, result.ExpiresAt, result.Description, result.Permissions.Actions)
 			t.Print()
 			os.Exit(0)
 		},
@@ -74,9 +74,9 @@ func listAPITokensCmd() *cobra.Command {
 				os.Exit(0)
 			}
 			t := tabby.New()
-			t.AddHeader("ID", "Name", "Description", "Expires at", "Permissions")
+			t.AddHeader("ID", "Name", "Expires at", "Description", "Permissions")
 			for _, token := range result.Result {
-				t.AddLine(token.ID, token.Name, token.Description, token.ExpiresAt, token.Permissions.Actions)
+				t.AddLine(token.ID, token.Name, token.ExpiresAt, token.Description, token.Permissions.Actions)
 			}
 
 			t.Print()
@@ -108,8 +108,8 @@ func getAPITokenCmd() *cobra.Command {
 				os.Exit(0)
 			}
 			t := tabby.New()
-			t.AddHeader("ID", "Name", "Description", "Expires at", "Permissions")
-			t.AddLine(token.ID, token.Name, token.Description, token.ExpiresAt, token.Permissions.Actions)
+			t.AddHeader("ID", "Name", "Expires at", "Description", "Permissions")
+			t.AddLine(token.ID, token.Name, token.ExpiresAt, token.Description, token.Permissions.Actions)
 
 			t.Print()
 			os.Exit(0)
