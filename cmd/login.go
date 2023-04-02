@@ -17,7 +17,7 @@ import (
 func loginCmd() *cobra.Command {
 	var loginCmd = &cobra.Command{
 		Use:   "login",
-		Short: "Log in to to the Appclacks Cloud platform",
+		Short: "Log in to the Appclacks Cloud platform",
 		Run: func(cmd *cobra.Command, args []string) {
 			reader := bufio.NewReader(os.Stdin)
 			appclacksConfigDir, err := client.GetConfigDirPath()
