@@ -32,13 +32,18 @@ func toMap(slice []string) (map[string]string, error) {
 
 func getHealthcheckCmd() *cobra.Command {
 	var healthcheckID string
+	var healthcheckName string
 	var getHealthcheck = &cobra.Command{
 		Use:   "get",
 		Short: "Get an API healthcheck",
 		Run: func(cmd *cobra.Command, args []string) {
 			client := buildClient()
+			identifier := healthcheckID
+			if identifier == "" {
+				identifier = healthcheckName
+			}
 			input := apitypes.GetHealthcheckInput{
-				ID: healthcheckID,
+				Identifier: identifier,
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
@@ -55,8 +60,7 @@ func getHealthcheckCmd() *cobra.Command {
 		},
 	}
 	getHealthcheck.PersistentFlags().StringVar(&healthcheckID, "id", "", "Healthcheck ID")
-	err := getHealthcheck.MarkPersistentFlagRequired("id")
-	exitIfError(err)
+	getHealthcheck.PersistentFlags().StringVar(&healthcheckName, "name", "", "Healthcheck Name")
 
 	return getHealthcheck
 }

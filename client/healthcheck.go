@@ -19,7 +19,7 @@ func (c *Client) DeleteHealthcheck(ctx context.Context, input apitypes.DeleteHea
 
 func (c *Client) GetHealthcheck(ctx context.Context, input apitypes.GetHealthcheckInput) (apitypes.Healthcheck, error) {
 	var result apitypes.Healthcheck
-	_, err := c.sendRequest(ctx, fmt.Sprintf("/api/v1/healthcheck/%s", input.ID), http.MethodGet, nil, &result, nil, TokenAuth)
+	_, err := c.sendRequest(ctx, fmt.Sprintf("/api/v1/healthcheck/%s", input.Identifier), http.MethodGet, nil, &result, nil, TokenAuth)
 	if err != nil {
 		return apitypes.Healthcheck{}, err
 	}

@@ -123,7 +123,11 @@ type DeleteHealthcheckInput struct {
 }
 
 type GetHealthcheckInput struct {
-	ID string `param:"id" description:"Healthcheck ID" validate:"required,uuid"`
+	Identifier string `param:"identifier" description:"Healthcheck Name or ID"`
+}
+
+type ListHealthchecksInput struct {
+	NamePattern string `query:"name-pattern" description:"Returns all health checks whose names are matching this regular expression"`
 }
 
 type ListHealthchecksOutput struct {
