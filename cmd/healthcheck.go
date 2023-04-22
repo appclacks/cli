@@ -50,7 +50,7 @@ func getHealthcheckCmd() *cobra.Command {
 			healthcheck, err := client.GetHealthcheck(ctx, input)
 			exitIfError(err)
 			if outputFormat == "json" {
-				json, err := json.Marshal(healthcheck)
+				json, err := json.Marshal(&healthcheck)
 				exitIfError(err)
 				fmt.Println(string(json))
 				os.Exit(0)
