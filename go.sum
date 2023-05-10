@@ -2,6 +2,10 @@ github.com/appclacks/go-types v0.0.0-20230401151938-70e500ff5d8e h1:q6F3f7rKacyM
 github.com/appclacks/go-types v0.0.0-20230401151938-70e500ff5d8e/go.mod h1:ULkbKlyVigBCY+eSEV0scorq+akwJlVbdnLI5xI8IwU=
 github.com/appclacks/go-types v0.0.0-20230412203547-193f76f5534c h1:I7lIy2VALaTMr+MMCLaoscCJIlHkAQRfk+zETxnca2o=
 github.com/appclacks/go-types v0.0.0-20230412203547-193f76f5534c/go.mod h1:ULkbKlyVigBCY+eSEV0scorq+akwJlVbdnLI5xI8IwU=
+github.com/appclacks/go-types v0.0.0-20230509204234-07f206f7c4af h1:Du12cHfa7Gvv2f2XDQXxtat2vZ65IGnOmSrAjvyDJqU=
+github.com/appclacks/go-types v0.0.0-20230509204234-07f206f7c4af/go.mod h1:ULkbKlyVigBCY+eSEV0scorq+akwJlVbdnLI5xI8IwU=
+github.com/appclacks/go-types v0.0.0-20230510191813-4ccfbeee3e7c h1:3pByBZlbOlA23fFCDhWnh0UfCbLBlDzdjWOxHJ7QBF0=
+github.com/appclacks/go-types v0.0.0-20230510191813-4ccfbeee3e7c/go.mod h1:ULkbKlyVigBCY+eSEV0scorq+akwJlVbdnLI5xI8IwU=
 github.com/cheynewallace/tabby v1.1.1 h1:JvUR8waht4Y0S3JF17G6Vhyt+FRhnqVCkk8l4YrOU54=
 github.com/cheynewallace/tabby v1.1.1/go.mod h1:Pba/6cUL8uYqvOc9RkyvFbHGrQ9wShyrn6/S/1OYVys=
 github.com/cpuguy83/go-md2man/v2 v2.0.2/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=

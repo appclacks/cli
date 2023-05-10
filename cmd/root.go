@@ -34,6 +34,13 @@ func Execute() error {
 	}
 	account.AddCommand(getAccountOrganizationCmd())
 
+	var password = &cobra.Command{
+		Use:   "password",
+		Short: "Manage your account password",
+	}
+	password.AddCommand(changePasswordCmd())
+	account.AddCommand(password)
+
 	// token
 
 	var token = &cobra.Command{

@@ -1,4 +1,4 @@
-# github.com/appclacks/go-types v0.0.0-20230412203547-193f76f5534c
+# github.com/appclacks/go-types v0.0.0-20230510191813-4ccfbeee3e7c
 ## explicit; go 1.19
 github.com/appclacks/go-types
 # github.com/cheynewallace/tabby v1.1.1
