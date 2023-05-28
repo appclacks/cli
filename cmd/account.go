@@ -14,6 +14,36 @@ import (
 	"github.com/spf13/cobra"
 )
 
+func sendResetPasswordLink() *cobra.Command {
+	var email string
+	var askResetPassword = &cobra.Command{
+		Use:   "send-reset-link",
+		Short: "Send a reset password link for this email",
+		Run: func(cmd *cobra.Command, args []string) {
+			client := buildClient()
+			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+			defer cancel()
+			payload := apitypes.ResetAccountPasswordLinkInput{
+				Email: email,
+			}
+			result, err := client.AskResetPasswordLink(ctx, payload)
+			exitIfError(err)
+			t := tabby.New()
+			t.AddHeader("Messages")
+			for _, message := range result.Messages {
+				t.AddLine(message)
+			}
+			t.Print()
+			os.Exit(0)
+		},
+	}
+	askResetPassword.PersistentFlags().StringVar(&email, "email", "", "Email")
+	err := askResetPassword.MarkPersistentFlagRequired("email")
+	exitIfError(err)
+	return askResetPassword
+
+}
+
 func changePasswordCmd() *cobra.Command {
 	var changePassword = &cobra.Command{
 		Use:   "change",
