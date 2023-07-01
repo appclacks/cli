@@ -30,6 +30,7 @@ func createHTTPHealthcheckCmd() *cobra.Command {
 	var query []string
 	var protocol string
 	var path string
+	var host string
 
 	var createHTTPHealthcheck = &cobra.Command{
 		Use:   "create",
@@ -63,6 +64,7 @@ func createHTTPHealthcheckCmd() *cobra.Command {
 					Headers:     headersMap,
 					Protocol:    protocol,
 					Path:        path,
+					Host:        host,
 				},
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
@@ -111,6 +113,8 @@ func createHTTPHealthcheckCmd() *cobra.Command {
 
 	createHTTPHealthcheck.PersistentFlags().StringVar(&path, "path", "", "Path to use for the healthcheck")
 
+	createHTTPHealthcheck.PersistentFlags().StringVar(&host, "host", "", "Host header to use for the health check HTTP requests")
+
 	createHTTPHealthcheck.PersistentFlags().StringVar(&timeout, "timeout", "5s", "healthcheck timeout")
 
 	createHTTPHealthcheck.PersistentFlags().StringSliceVar(&headers, "headers", []string{}, "healthchecks http headers (example: foo=bar)")
@@ -142,6 +146,7 @@ func updateHTTPHealthcheckCmd() *cobra.Command {
 	var query []string
 	var protocol string
 	var path string
+	var host string
 
 	var updateHTTPHealthcheck = &cobra.Command{
 		Use:   "update",
@@ -176,6 +181,7 @@ func updateHTTPHealthcheckCmd() *cobra.Command {
 					Headers:     headersMap,
 					Protocol:    protocol,
 					Path:        path,
+					Host:        host,
 				},
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
@@ -227,6 +233,8 @@ func updateHTTPHealthcheckCmd() *cobra.Command {
 	updateHTTPHealthcheck.PersistentFlags().StringVar(&protocol, "protocol", "https", "Protocol to use for the healthcheck (http or https)")
 
 	updateHTTPHealthcheck.PersistentFlags().StringVar(&path, "path", "", "Path to use for the healthcheck")
+
+	updateHTTPHealthcheck.PersistentFlags().StringVar(&host, "host", "", "Host header to use for the health check HTTP requests")
 
 	updateHTTPHealthcheck.PersistentFlags().StringVar(&timeout, "timeout", "5s", "healthcheck timeout")
 
