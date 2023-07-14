@@ -31,6 +31,8 @@ func createHTTPHealthcheckCmd() *cobra.Command {
 	var protocol string
 	var path string
 	var host string
+	var serverName string
+	var insecure bool
 
 	var createHTTPHealthcheck = &cobra.Command{
 		Use:   "create",
@@ -65,6 +67,8 @@ func createHTTPHealthcheckCmd() *cobra.Command {
 					Protocol:    protocol,
 					Path:        path,
 					Host:        host,
+					ServerName:  serverName,
+					Insecure:    insecure,
 				},
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
@@ -120,6 +124,8 @@ func createHTTPHealthcheckCmd() *cobra.Command {
 	createHTTPHealthcheck.PersistentFlags().StringSliceVar(&headers, "headers", []string{}, "healthchecks http headers (example: foo=bar)")
 
 	createHTTPHealthcheck.PersistentFlags().StringSliceVar(&query, "query", []string{}, "healthchecks http query params (example: foo=bar)")
+	createHTTPHealthcheck.PersistentFlags().StringVar(&serverName, "server-name", "", "TLS SNI")
+	createHTTPHealthcheck.PersistentFlags().BoolVar(&insecure, "insecure", false, "TLS Insecure")
 
 	exitIfError(err)
 
@@ -147,6 +153,8 @@ func updateHTTPHealthcheckCmd() *cobra.Command {
 	var protocol string
 	var path string
 	var host string
+	var serverName string
+	var insecure bool
 
 	var updateHTTPHealthcheck = &cobra.Command{
 		Use:   "update",
@@ -182,6 +190,8 @@ func updateHTTPHealthcheckCmd() *cobra.Command {
 					Protocol:    protocol,
 					Path:        path,
 					Host:        host,
+					ServerName:  serverName,
+					Insecure:    insecure,
 				},
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
@@ -241,6 +251,9 @@ func updateHTTPHealthcheckCmd() *cobra.Command {
 	updateHTTPHealthcheck.PersistentFlags().StringSliceVar(&headers, "headers", []string{}, "healthchecks http headers (example: foo=bar)")
 
 	updateHTTPHealthcheck.PersistentFlags().StringSliceVar(&query, "query", []string{}, "healthchecks http query params (example: foo=bar)")
+
+	updateHTTPHealthcheck.PersistentFlags().StringVar(&serverName, "server-name", "", "TLS SNI")
+	updateHTTPHealthcheck.PersistentFlags().BoolVar(&insecure, "insecure", false, "TLS Insecure")
 
 	return updateHTTPHealthcheck
 }
