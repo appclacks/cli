@@ -220,7 +220,7 @@ func updateHTTPHealthcheckCmd() *cobra.Command {
 
 	updateHTTPHealthcheck.PersistentFlags().StringSliceVar(&labels, "labels", []string{}, "healthchecks labels (example: foo=bar)")
 
-	updateHTTPHealthcheck.PersistentFlags().StringVar(&interval, "interval", "60s", "healthcheck interval (examples: 10s, 3m)")
+	updateHTTPHealthcheck.PersistentFlags().StringVar(&interval, "interval", "60s", "healthcheck interval (examples: 120s, 3m)")
 
 	updateHTTPHealthcheck.PersistentFlags().BoolVar(&disabled, "disabled", false, "Diasble the healthcheck on the Appclacks platform")
 
