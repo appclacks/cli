@@ -1,13 +1,13 @@
-# github.com/appclacks/go-types v0.0.0-20230708134250-a6fdc4eb088f
-## explicit; go 1.19
+# github.com/appclacks/go-types v0.0.0-20231220132907-2cf47ed6a994
+## explicit; go 1.21
 github.com/appclacks/go-types
 # github.com/cheynewallace/tabby v1.1.1
 ## explicit
 github.com/cheynewallace/tabby
-# github.com/inconshreveable/mousetrap v1.0.0
-## explicit
+# github.com/inconshreveable/mousetrap v1.1.0
+## explicit; go 1.18
 github.com/inconshreveable/mousetrap
-# github.com/spf13/cobra v1.5.0
+# github.com/spf13/cobra v1.8.0
 ## explicit; go 1.15
 github.com/spf13/cobra
 # github.com/spf13/pflag v1.0.5
