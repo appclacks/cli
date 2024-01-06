@@ -102,6 +102,10 @@ func loadEnv(client *Client) {
 	if os.Getenv("APPCLACKS_PROFILE") != "" {
 		client.profile = os.Getenv("APPCLACKS_PROFILE")
 	}
+
+	if os.Getenv("APPCLACKS_API_ENDPOINT") != "" {
+		client.endpoint = os.Getenv("APPCLACKS_API_ENDPOINT")
+	}
 }
 
 func loadConfigFile(client *Client) error {
