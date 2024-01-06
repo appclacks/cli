@@ -175,6 +175,9 @@ func (c *Client) sendRequest(ctx context.Context, url string, method string, bod
 		method,
 		fmt.Sprintf("%s%s", c.endpoint, url),
 		reqBody)
+	if err != nil {
+		return nil, err
+	}
 	if len(queryParams) != 0 {
 		q := request.URL.Query()
 		for k, v := range queryParams {
@@ -193,9 +196,6 @@ func (c *Client) sendRequest(ctx context.Context, url string, method string, bod
 		}
 		creds := base64.StdEncoding.EncodeToString([]byte(authString))
 		request.Header.Add("Authorization", fmt.Sprintf("Basic %s", creds))
-	}
-	if err != nil {
-		return nil, err
 	}
 	response, err := c.http.Do(request)
 	if err != nil {
