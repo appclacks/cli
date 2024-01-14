@@ -7,42 +7,14 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"syscall"
 
 	"github.com/appclacks/cli/client"
 	apitypes "github.com/appclacks/go-types"
 	"github.com/cheynewallace/tabby"
 	"github.com/spf13/cobra"
+	"golang.org/x/term"
 )
-
-func sendResetPasswordLink() *cobra.Command {
-	var email string
-	var askResetPassword = &cobra.Command{
-		Use:   "send-reset-link",
-		Short: "Send a reset password link for this email",
-		Run: func(cmd *cobra.Command, args []string) {
-			client := buildClient()
-			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
-			defer cancel()
-			payload := apitypes.ResetAccountPasswordLinkInput{
-				Email: email,
-			}
-			result, err := client.AskResetPasswordLink(ctx, payload)
-			exitIfError(err)
-			t := tabby.New()
-			t.AddHeader("Messages")
-			for _, message := range result.Messages {
-				t.AddLine(message)
-			}
-			t.Print()
-			os.Exit(0)
-		},
-	}
-	askResetPassword.PersistentFlags().StringVar(&email, "email", "", "Email")
-	err := askResetPassword.MarkPersistentFlagRequired("email")
-	exitIfError(err)
-	return askResetPassword
-
-}
 
 func changePasswordCmd() *cobra.Command {
 	var changePassword = &cobra.Command{
@@ -55,12 +27,15 @@ func changePasswordCmd() *cobra.Command {
 			exitIfError(err)
 			email = strings.TrimSpace(email)
 			fmt.Printf("\n* Appclacks current Password:\n> ")
-			password, err := reader.ReadString('\n')
-			fmt.Println("")
+			bytePassword, err := term.ReadPassword(int(syscall.Stdin))
 			exitIfError(err)
+			password := string(bytePassword)
+			fmt.Println("")
 			password = strings.TrimSpace(password)
 			fmt.Printf("\n* Appclacks new Password:\n> ")
-			newPassword, err := reader.ReadString('\n')
+			byteNewPassword, err := term.ReadPassword(int(syscall.Stdin))
+			exitIfError(err)
+			newPassword := string(byteNewPassword)
 			fmt.Println("")
 			exitIfError(err)
 			newPassword = strings.TrimSpace(newPassword)

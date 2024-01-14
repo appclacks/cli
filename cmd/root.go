@@ -39,7 +39,6 @@ func Execute() error {
 		Short: "Manage your account password",
 	}
 	password.AddCommand(changePasswordCmd())
-	password.AddCommand(sendResetPasswordLink())
 	account.AddCommand(password)
 
 	// token

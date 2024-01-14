@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"syscall"
 
+	"golang.org/x/term"
 	"gopkg.in/yaml.v3"
 
 	"github.com/appclacks/cli/client"
@@ -44,10 +46,10 @@ func loginCmd() *cobra.Command {
 			exitIfError(err)
 			email = strings.TrimSpace(email)
 			fmt.Printf("\n* Appclacks Password:\n> ")
-			password, err := reader.ReadString('\n')
-			fmt.Println("")
+			bytePassword, err := term.ReadPassword(int(syscall.Stdin))
 			exitIfError(err)
-			password = strings.TrimSpace(password)
+			fmt.Println("")
+			password := strings.TrimSpace(string(bytePassword))
 
 			cliClient, err := client.New(appclacksURL, client.WithUserPassword(client.AccountEmail(email), client.AccountPassword(password)))
 			exitIfError(err)
