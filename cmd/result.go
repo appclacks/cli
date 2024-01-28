@@ -74,9 +74,9 @@ func listHealthckecksResultsCmd() *cobra.Command {
 			os.Exit(0)
 		},
 	}
-	listHealthchecksResults.PersistentFlags().StringVar(&startDate, "start-date", "", "Start date for results retrieval (Example: 2006-01-02T15:04:05). Default to 5 minutes ago")
+	listHealthchecksResults.PersistentFlags().StringVar(&startDate, "start-date", "", "Start date for results retrieval in UTC (Example: 2006-01-02T15:04:05). Default to 5 minutes ago")
 
-	listHealthchecksResults.PersistentFlags().StringVar(&endDate, "end-date", "", "End date for results retrieval (Example: 2006-01-02T15:04:05). Default to the current time")
+	listHealthchecksResults.PersistentFlags().StringVar(&endDate, "end-date", "", "End date for results retrieval in UTC (Example: 2006-01-02T15:04:05). Default to the current time")
 
 	listHealthchecksResults.PersistentFlags().StringVar(&healthcheckID, "healthcheck-id", "", "Get result for a specific healthcheck")
 	listHealthchecksResults.PersistentFlags().UintVar(&page, "page", 1, "Result page to retrieve")
