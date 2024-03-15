@@ -73,7 +73,7 @@ func createHTTPHealthcheckCmd() *cobra.Command {
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
-			healthcheck, err := client.CreateHTTPHealthcheck(ctx, payload)
+			healthcheck, err := client.CreateHTTPHealthcheckWithContext(ctx, payload)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(healthcheck)
@@ -196,7 +196,7 @@ func updateHTTPHealthcheckCmd() *cobra.Command {
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
-			result, err := client.UpdateHTTPHealthcheck(ctx, payload)
+			result, err := client.UpdateHTTPHealthcheckWithContext(ctx, payload)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)

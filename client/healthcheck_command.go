@@ -2,38 +2,87 @@ package client
 
 import (
 	"context"
-	"fmt"
-	"net/http"
 
 	apitypes "github.com/appclacks/go-types"
 )
 
-func (c *Client) CreateCommandHealthcheck(ctx context.Context, input apitypes.CreateCommandHealthcheckInput) (apitypes.Healthcheck, error) {
+// ############################################################
+// ############################################################
+// 			Client public Account-useCases 
+
+func (c *Client) CreateCommandHealthcheckWithContext(ctx context.Context, input apitypes.CreateCommandHealthcheckInput) (apitypes.Healthcheck, error){
 	var result apitypes.Healthcheck
-	_, err := c.sendRequest(ctx, "/api/v1/healthcheck/command", http.MethodPost, input, &result, nil, TokenAuth)
-	if err != nil {
-		return apitypes.Healthcheck{}, err
+	
+	if !c.Credentials.HasAuth() {
+		return apitypes.Healthcheck{}, formatError("CreateCommandHealthcheckWithContext", "Credentials missing")
 	}
-	return result, nil
+
+	if ctx == nil {
+		return apitypes.Healthcheck{}, formatError("CreateCommandHealthcheckWithContext", " 'nil' value for context.Context")
+	}
+
+	request, err := c.RequestsHelper.BuildCreateCommandHealthCheckRequest(input)
+	if err != nil {
+		return apitypes.Healthcheck{}, err 
+	}
+
+	request = request.WithContext(ctx)
+
+	return sendRequestGetStruct(c.RequestsHelper, request, result)
+
 }
 
-func (c *Client) UpdateCommandHealthcheck(ctx context.Context, input apitypes.UpdateCommandHealthcheckInput) (apitypes.Healthcheck, error) {
+func (c *Client) CreateCommandHealthcheck(input apitypes.CreateCommandHealthcheckInput) (apitypes.Healthcheck, error) {
 	var result apitypes.Healthcheck
-	internalInput := internalUpdateHealthcheckInput{
-		Name:        input.Name,
-		Description: input.Description,
-		Labels:      input.Labels,
-		Interval:    input.Interval,
-		Enabled:     input.Enabled,
-		Timeout:     input.Timeout,
+
+	if !c.Credentials.HasAuth() {
+		return apitypes.Healthcheck{}, formatError("CreateCommandHealthcheck", "Credentials missing")
 	}
-	payload, err := jsonMerge(internalInput, input.HealthcheckCommandDefinition)
+
+	request, err := c.RequestsHelper.BuildCreateCommandHealthCheckRequest(input)
 	if err != nil {
-		return result, err
+		return apitypes.Healthcheck{}, err 
 	}
-	_, err = c.sendRequest(ctx, fmt.Sprintf("/api/v1/healthcheck/command/%s", input.ID), http.MethodPut, payload, &result, nil, TokenAuth)
+
+	return sendRequestGetStruct(c.RequestsHelper, request, result)
+}
+
+// -------------------------------------------------------------------------------------------------------------------------------
+
+
+func (c *Client) UpdateCommandHealthcheckWithContext(ctx context.Context, input apitypes.UpdateCommandHealthcheckInput) (apitypes.Healthcheck, error) {
+	var result apitypes.Healthcheck
+	
+	if !c.Credentials.HasAuth() {
+		return apitypes.Healthcheck{}, formatError("UpdateCommandHealthcheckWithContext", "Credentials missing")
+	}
+
+	if ctx == nil {
+		return apitypes.Healthcheck{}, formatError("UpdateCommandHealthcheckWithContext", " 'nil' value for context.Context")
+	}
+	
+	request, err := c.RequestsHelper.BuildUpdateCommandHealthCheckRequest(input)
 	if err != nil {
-		return apitypes.Healthcheck{}, err
+		return apitypes.Healthcheck{}, err 
 	}
-	return result, nil
+
+	request = request.WithContext(ctx)
+
+	return sendRequestGetStruct(c.RequestsHelper, request, result)
+}
+
+func (c *Client) UpdateCommandHealthcheck(input apitypes.UpdateCommandHealthcheckInput) (apitypes.Healthcheck, error) {
+	var result apitypes.Healthcheck
+
+	if !c.Credentials.HasAuth() {
+		return apitypes.Healthcheck{}, formatError("UpdateCommandHealthcheck", "Credentials missing")
+	}
+
+	request, err := c.RequestsHelper.BuildUpdateCommandHealthCheckRequest(input)
+	if err != nil {
+		return apitypes.Healthcheck{}, err 
+	}
+
+
+	return sendRequestGetStruct(c.RequestsHelper, request, result)
 }

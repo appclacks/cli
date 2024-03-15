@@ -47,7 +47,7 @@ func getHealthcheckCmd() *cobra.Command {
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
-			healthcheck, err := client.GetHealthcheck(ctx, input)
+			healthcheck, err := client.GetHealthcheckWithContext(ctx, input)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(&healthcheck)
@@ -77,7 +77,7 @@ func deleteHealthcheckCmd() *cobra.Command {
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
-			result, err := client.DeleteHealthcheck(ctx, input)
+			result, err := client.DeleteHealthcheckWithContext(ctx, input)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)
@@ -109,7 +109,7 @@ func listHealthchecksCmd() *cobra.Command {
 			client := buildClient()
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
-			result, err := client.ListHealthchecks(ctx)
+			result, err := client.ListHealthchecksWithContext(ctx)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)

@@ -2,49 +2,49 @@ package client
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"strconv"
 
 	apitypes "github.com/appclacks/go-types"
 )
 
-func (c *Client) ListHealthchecksResults(ctx context.Context, input apitypes.ListHealthchecksResultsInput) (apitypes.ListHealthchecksResultsOutput, error) {
+// ############################################################
+// ############################################################
+// 			Client Results public methods
+
+
+func (c *Client) ListHealthchecksResultsWithContext(ctx context.Context, input apitypes.ListHealthchecksResultsInput) (apitypes.ListHealthchecksResultsOutput, error) {
 	var result apitypes.ListHealthchecksResultsOutput
-	queryParams := make(map[string]string)
-	startBytes, err := json.Marshal(input.StartDate)
+
+	if !c.Credentials.HasAuth() {
+		return apitypes.ListHealthchecksResultsOutput{}, formatError("ListHealthchecksResultsWithContext", "Credentials missing")
+	}
+
+	if ctx == nil {
+		return apitypes.ListHealthchecksResultsOutput{}, formatError("ListHealthchecksResultsWithContext", " 'nil' value for context.Context")
+	}
+
+	request, err := c.RequestsHelper.BuildGetResultsRequest(input)
 	if err != nil {
 		return apitypes.ListHealthchecksResultsOutput{}, err
 	}
-	queryParams["start-date"], err = strconv.Unquote(string(startBytes))
-	if err != nil {
-		return apitypes.ListHealthchecksResultsOutput{}, err
-	}
-	endBytes, err := json.Marshal(input.EndDate)
-	if err != nil {
-		return apitypes.ListHealthchecksResultsOutput{}, err
-	}
-	queryParams["end-date"], err = strconv.Unquote(string(endBytes))
-	if err != nil {
-		return apitypes.ListHealthchecksResultsOutput{}, err
-	}
-	if input.HealthcheckID != "" {
-		queryParams["healthcheck-id"] = input.HealthcheckID
-	}
-	if input.Page != 0 {
-		queryParams["page"] = fmt.Sprintf("%d", input.Page)
-	}
-	if input.Success != nil {
-		if *input.Success {
-			queryParams["success"] = "true"
-		} else {
-			queryParams["success"] = "false"
-		}
-	}
-	_, err = c.sendRequest(ctx, "/api/v1/result/healthchecks", http.MethodGet, nil, &result, queryParams, TokenAuth)
-	if err != nil {
-		return apitypes.ListHealthchecksResultsOutput{}, err
-	}
-	return result, nil
+
+	request = request.WithContext(ctx)
+
+	return sendRequestGetStruct(c.RequestsHelper, request, result)
 }
+
+func (c *Client) ListHealthchecksResults(input apitypes.ListHealthchecksResultsInput) (apitypes.ListHealthchecksResultsOutput, error) {
+	var result apitypes.ListHealthchecksResultsOutput
+	
+	if !c.Credentials.HasAuth() {
+		return apitypes.ListHealthchecksResultsOutput{}, formatError("ListHealthchecksResults", "Credentials missing")
+	}
+
+	request, err := c.RequestsHelper.BuildGetResultsRequest(input)
+	if err != nil {
+		return apitypes.ListHealthchecksResultsOutput{}, err
+	}
+
+	return sendRequestGetStruct(c.RequestsHelper, request, result)
+
+}
+

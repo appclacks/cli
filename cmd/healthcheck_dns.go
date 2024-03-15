@@ -42,7 +42,7 @@ func createDNSHealthcheckCmd() *cobra.Command {
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
-			healthcheck, err := client.CreateDNSHealthcheck(ctx, payload)
+			healthcheck, err := client.CreateDNSHealthcheckWithContext(ctx, payload)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(healthcheck)
@@ -111,7 +111,7 @@ func updateDNSHealthcheckCmd() *cobra.Command {
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
-			result, err := client.UpdateDNSHealthcheck(ctx, payload)
+			result, err := client.UpdateDNSHealthcheckWithContext(ctx, payload)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)

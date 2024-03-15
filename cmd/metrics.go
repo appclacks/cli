@@ -16,7 +16,7 @@ func getHealthchecksMetricsCmd() *cobra.Command {
 			client := buildClient()
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
-			metrics, err := client.GetHealthchecksMetrics(ctx)
+			metrics, err := client.GetHealthchecksMetricsWithContext(ctx)
 			exitIfError(err)
 			fmt.Print(metrics)
 			os.Exit(0)

@@ -54,7 +54,7 @@ func listHealthckecksResultsCmd() *cobra.Command {
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
-			result, err := client.ListHealthchecksResults(ctx, input)
+			result, err := client.ListHealthchecksResultsWithContext(ctx, input)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)
