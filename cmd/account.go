@@ -8,8 +8,6 @@ import (
 	"os"
 	"strings"
 	"syscall"
-
-	"github.com/appclacks/cli/client"
 	apitypes "github.com/appclacks/go-types"
 	"github.com/cheynewallace/tabby"
 	"github.com/spf13/cobra"
@@ -39,15 +37,16 @@ func changePasswordCmd() *cobra.Command {
 			fmt.Println("")
 			exitIfError(err)
 			newPassword = strings.TrimSpace(newPassword)
-			cliClient, err := client.New(appclacksURL, client.WithUserPassword(client.AccountEmail(email), client.AccountPassword(password)))
-			exitIfError(err)
+			
+			cliClient := buildClientByPassword(email, password)
+			
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
 
 			payload := apitypes.ChangeAccountPasswordInput{
 				NewPassword: newPassword,
 			}
-			result, err := cliClient.ChangeAccountPassword(ctx, payload)
+			result, err := cliClient.ChangeAccountPasswordWithContext(ctx, payload)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)
@@ -75,7 +74,7 @@ func getAccountOrganizationCmd() *cobra.Command {
 			client := buildClient()
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
-			result, err := client.GetOrganizationForAccount(ctx)
+			result, err := client.GetOrganizationForAccountWithContext(ctx)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)

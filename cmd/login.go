@@ -11,7 +11,6 @@ import (
 	"golang.org/x/term"
 	"gopkg.in/yaml.v3"
 
-	"github.com/appclacks/cli/client"
 	apitypes "github.com/appclacks/go-types"
 	"github.com/spf13/cobra"
 )
@@ -22,18 +21,18 @@ func loginCmd() *cobra.Command {
 		Short: "Log in to the Appclacks Cloud platform",
 		Run: func(cmd *cobra.Command, args []string) {
 			reader := bufio.NewReader(os.Stdin)
-			appclacksConfigDir, err := client.GetConfigDirPath()
+			appclacksConfigDir, err := GetConfigDirPath()
 			exitIfError(err)
 			err = os.MkdirAll(appclacksConfigDir, os.ModePerm)
 			exitIfError(err)
-			filepath, err := client.GetConfigFilePath()
+			filepath, err := GetConfigFilePath()
 			exitIfError(err)
 
 			fp, err := os.OpenFile(filepath, os.O_RDONLY|os.O_CREATE, 0600)
 			exitIfError(err)
 			fp.Close()
 
-			profiles, err := client.ReadConfig(filepath)
+			profiles, err := ReadConfig(filepath)
 			exitIfError(err)
 
 			fmt.Printf("The new profile will be written into the file located at: %s\n\n", filepath)
@@ -51,12 +50,12 @@ func loginCmd() *cobra.Command {
 			fmt.Println("")
 			password := strings.TrimSpace(string(bytePassword))
 
-			cliClient, err := client.New(appclacksURL, client.WithUserPassword(client.AccountEmail(email), client.AccountPassword(password)))
-			exitIfError(err)
+			cliClient := buildClientByPassword(email, password)
 
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 
-			org, err := cliClient.GetOrganizationForAccount(ctx)
+			org, err := cliClient.GetOrganizationForAccountWithContext(ctx)
+			
 			exitIfError(err)
 			cancel()
 
@@ -71,16 +70,16 @@ func loginCmd() *cobra.Command {
 					Actions: []string{"*"},
 				},
 			}
-			apiToken, err := cliClient.CreateAPIToken(ctx, payload)
+			apiToken, err := cliClient.CreateAPITokenWithContext(ctx, payload)
 			exitIfError(err)
 			cancel()
 
-			profile := client.ConfigFileProfile{
+			profile := ConfigFileProfile{
 				OrganizationID: org.ID,
 				APIToken:       apiToken.Token,
 			}
 			if profiles.Profiles == nil {
-				profiles.Profiles = make(map[string]client.ConfigFileProfile)
+				profiles.Profiles = make(map[string]ConfigFileProfile)
 			}
 
 			profiles.Profiles[profileName] = profile

@@ -2,20 +2,55 @@ package client
 
 import (
 	"context"
-	"fmt"
-	"net/http"
 
 	apitypes "github.com/appclacks/go-types"
 )
 
-func (c *Client) CreateDNSHealthcheck(ctx context.Context, input apitypes.CreateDNSHealthcheckInput) (apitypes.Healthcheck, error) {
+// ############################################################
+// ############################################################
+// 			Client public HealthcheckDNS-useCases 
+
+
+func (c *Client) CreateDNSHealthcheckWithContext(ctx context.Context, input apitypes.CreateDNSHealthcheckInput) (apitypes.Healthcheck, error) {
 	var result apitypes.Healthcheck
-	_, err := c.sendRequest(ctx, "/api/v1/healthcheck/dns", http.MethodPost, input, &result, nil, TokenAuth)
-	if err != nil {
-		return apitypes.Healthcheck{}, err
+	
+	if !c.Credentials.HasAuth() {
+		return apitypes.Healthcheck{}, formatError("CreateDNSHealthcheckWithContext", "Credentials missing")
 	}
-	return result, nil
+
+	if ctx == nil {
+		return apitypes.Healthcheck{}, formatError("CreateDNSHealthcheckWithContext", " 'nil' value for context.Context")
+	}
+
+	request, err := c.RequestsHelper.BuildCreateDNSHealthCheckRequest(input)
+	if err != nil {
+		return apitypes.Healthcheck{}, err 
+	}
+
+	request = request.WithContext(ctx)
+
+	return sendRequestGetStruct(c.RequestsHelper, request, result)
+
 }
+
+
+func (c *Client) CreateDNSHealthcheck(input apitypes.CreateDNSHealthcheckInput) (apitypes.Healthcheck, error) {
+	var result apitypes.Healthcheck
+	
+	if !c.Credentials.HasAuth() {
+		return apitypes.Healthcheck{}, formatError("CreateDNSHealthcheck", "Credentials missing")
+	}
+
+	request, err := c.RequestsHelper.BuildCreateDNSHealthCheckRequest(input)
+	if err != nil {
+		return apitypes.Healthcheck{}, err 
+	}
+
+	return sendRequestGetStruct(c.RequestsHelper, request, result)
+
+}
+
+// --------------------------------------------------------------------------------------------------------------------
 
 type internalUpdateHealthcheckInput struct {
 	Name        string            `json:"name"`
@@ -26,23 +61,38 @@ type internalUpdateHealthcheckInput struct {
 	Timeout     string            `json:"timeout"`
 }
 
-func (c *Client) UpdateDNSHealthcheck(ctx context.Context, input apitypes.UpdateDNSHealthcheckInput) (apitypes.Healthcheck, error) {
+func (c *Client) UpdateDNSHealthcheckWithContext(ctx context.Context, input apitypes.UpdateDNSHealthcheckInput) (apitypes.Healthcheck, error) {
 	var result apitypes.Healthcheck
-	internalInput := internalUpdateHealthcheckInput{
-		Name:        input.Name,
-		Description: input.Description,
-		Labels:      input.Labels,
-		Interval:    input.Interval,
-		Enabled:     input.Enabled,
-		Timeout:     input.Timeout,
+	
+	if !c.Credentials.HasAuth() {
+		return apitypes.Healthcheck{}, formatError("UpdateDNSHealthcheckWithContext", "Credentials missing")
 	}
-	payload, err := jsonMerge(internalInput, input.HealthcheckDNSDefinition)
+
+	if ctx == nil {
+		return apitypes.Healthcheck{}, formatError("UpdateDNSHealthcheckWithContext", " 'nil' value for context.Context")
+	}
+
+	request, err := c.RequestsHelper.BuildUpdateDNSHealthCheckRequest(input)
 	if err != nil {
-		return result, err
+		return apitypes.Healthcheck{}, err 
 	}
-	_, err = c.sendRequest(ctx, fmt.Sprintf("/api/v1/healthcheck/dns/%s", input.ID), http.MethodPut, payload, &result, nil, TokenAuth)
+
+	request = request.WithContext(ctx)
+
+	return sendRequestGetStruct(c.RequestsHelper, request, result)
+}
+
+func (c *Client) UpdateDNSHealthcheck(input apitypes.UpdateDNSHealthcheckInput) (apitypes.Healthcheck, error) {
+	var result apitypes.Healthcheck
+	
+	if !c.Credentials.HasAuth() {
+		return apitypes.Healthcheck{}, formatError("UpdateDNSHealthcheck", "Credentials missing")
+	}
+
+	request, err := c.RequestsHelper.BuildUpdateDNSHealthCheckRequest(input)
 	if err != nil {
-		return apitypes.Healthcheck{}, err
+		return apitypes.Healthcheck{}, err 
 	}
-	return result, nil
+
+	return sendRequestGetStruct(c.RequestsHelper, request, result)
 }

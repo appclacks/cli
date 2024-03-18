@@ -32,7 +32,7 @@ func createAPITokenCmd() *cobra.Command {
 					Actions: permissions,
 				},
 			}
-			result, err := client.CreateAPIToken(ctx, payload)
+			result, err := client.CreateAPITokenWithContext(ctx, payload)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)
@@ -65,7 +65,7 @@ func listAPITokensCmd() *cobra.Command {
 			client := buildClient()
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
-			result, err := client.ListAPITokens(ctx)
+			result, err := client.ListAPITokensWithContext(ctx)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)
@@ -99,7 +99,7 @@ func getAPITokenCmd() *cobra.Command {
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
-			token, err := client.GetAPIToken(ctx, input)
+			token, err := client.GetAPITokenWithContext(ctx, input)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(token)
@@ -133,7 +133,7 @@ func deleteAPITokenCmd() *cobra.Command {
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
-			result, err := client.DeleteAPIToken(ctx, input)
+			result, err := client.DeleteAPITokenWithContext(ctx, input)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)

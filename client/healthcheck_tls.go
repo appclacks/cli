@@ -2,38 +2,88 @@ package client
 
 import (
 	"context"
-	"fmt"
-	"net/http"
+
 
 	apitypes "github.com/appclacks/go-types"
 )
 
-func (c *Client) CreateTLSHealthcheck(ctx context.Context, input apitypes.CreateTLSHealthcheckInput) (apitypes.Healthcheck, error) {
+// ############################################################
+// ############################################################
+// 			Client public TLSHealthcheck-useCases 
+
+
+func (c *Client) CreateTLSHealthcheckWithContext(ctx context.Context, input apitypes.CreateTLSHealthcheckInput) (apitypes.Healthcheck, error) {
 	var result apitypes.Healthcheck
-	_, err := c.sendRequest(ctx, "/api/v1/healthcheck/tls", http.MethodPost, input, &result, nil, TokenAuth)
-	if err != nil {
-		return apitypes.Healthcheck{}, err
+	
+	if !c.Credentials.HasAuth() {
+		return apitypes.Healthcheck{}, formatError("CreateTLSHealthcheckWithContext", "Credentials missing")
 	}
-	return result, nil
+
+	if ctx == nil {
+		return apitypes.Healthcheck{}, formatError("CreateTLSHealthcheckWithContext", " 'nil' value for context.Context")
+	}
+
+	request, err := c.RequestsHelper.BuildCreateTLSHealthCheckRequest(input)
+	if err != nil {
+		return apitypes.Healthcheck{}, err 
+	}
+
+	request = request.WithContext(ctx)
+
+	return sendRequestGetStruct(c.RequestsHelper, request, result)
+
 }
 
-func (c *Client) UpdateTLSHealthcheck(ctx context.Context, input apitypes.UpdateTLSHealthcheckInput) (apitypes.Healthcheck, error) {
+func (c *Client) CreateTLSHealthcheck(input apitypes.CreateTLSHealthcheckInput) (apitypes.Healthcheck, error) {
 	var result apitypes.Healthcheck
-	internalInput := internalUpdateHealthcheckInput{
-		Name:        input.Name,
-		Description: input.Description,
-		Labels:      input.Labels,
-		Interval:    input.Interval,
-		Enabled:     input.Enabled,
-		Timeout:     input.Timeout,
+	
+	if !c.Credentials.HasAuth() {
+		return apitypes.Healthcheck{}, formatError("CreateTLSHealthcheck", "Credentials missing")
 	}
-	payload, err := jsonMerge(internalInput, input.HealthcheckTLSDefinition)
+
+	request, err := c.RequestsHelper.BuildCreateTLSHealthCheckRequest(input)
 	if err != nil {
-		return result, err
+		return apitypes.Healthcheck{}, err 
 	}
-	_, err = c.sendRequest(ctx, fmt.Sprintf("/api/v1/healthcheck/tls/%s", input.ID), http.MethodPut, payload, &result, nil, TokenAuth)
+
+	return sendRequestGetStruct(c.RequestsHelper, request, result)
+
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------
+
+func (c *Client) UpdateTLSHealthcheckWithContext(ctx context.Context, input apitypes.UpdateTLSHealthcheckInput) (apitypes.Healthcheck, error) {
+	var result apitypes.Healthcheck
+	
+	if !c.Credentials.HasAuth() {
+		return apitypes.Healthcheck{}, formatError("UpdateTLSHealthcheckWithContext", "Credentials missing")
+	}
+
+	if ctx == nil {
+		return apitypes.Healthcheck{}, formatError("UpdateTLSHealthcheckWithContext", " 'nil' value for context.Context")
+	}
+
+	request, err := c.RequestsHelper.BuildUpdateTLSHealthCheckRequest(input)
 	if err != nil {
-		return apitypes.Healthcheck{}, err
+		return apitypes.Healthcheck{}, err 
 	}
-	return result, nil
+
+	request = request.WithContext(ctx)
+
+	return sendRequestGetStruct(c.RequestsHelper, request, result)
+}
+
+func (c *Client) UpdateTLSHealthcheck(input apitypes.UpdateTLSHealthcheckInput) (apitypes.Healthcheck, error) {
+	var result apitypes.Healthcheck
+	
+	if !c.Credentials.HasAuth() {
+		return apitypes.Healthcheck{}, formatError("UpdateTLSHealthcheck", "Credentials missing")
+	}
+
+	request, err := c.RequestsHelper.BuildUpdateTLSHealthCheckRequest(input)
+	if err != nil {
+		return apitypes.Healthcheck{}, err 
+	}
+
+	return sendRequestGetStruct(c.RequestsHelper, request, result)
 }

@@ -56,7 +56,7 @@ func createTLSHealthcheckCmd() *cobra.Command {
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
-			healthcheck, err := client.CreateTLSHealthcheck(ctx, payload)
+			healthcheck, err := client.CreateTLSHealthcheckWithContext(ctx, payload)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(healthcheck)
@@ -146,7 +146,7 @@ func updateTLSHealthcheckCmd() *cobra.Command {
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 			defer cancel()
-			result, err := client.UpdateTLSHealthcheck(ctx, payload)
+			result, err := client.UpdateTLSHealthcheckWithContext(ctx, payload)
 			exitIfError(err)
 			if outputFormat == "json" {
 				json, err := json.Marshal(result)

@@ -127,7 +127,55 @@ func Execute() error {
 }
 
 func buildClient() *client.Client {
-	client, err := client.New(appclacksURL, client.WithProfile(profile))
-	exitIfError(err)
+
+	var client *client.Client
+
+	connInfos := CreateConnInfos()
+	if profile != "" {
+		connInfos.profile = profile 
+		err := loadConnInfosFromConfigFile(connInfos)
+		exitIfError(err)
+	}
+
+	if connInfos.TypeAuth == "noAuth" {
+		loadConnInfosFromEnv(connInfos)
+	}
+
+	if connInfos.TypeAuth == "noAuth" {
+		err := loadConnInfosFromConfigFile(connInfos)
+		exitIfError(err)
+	}
+
+	if connInfos.TypeAuth == "password"{
+		client = buildClientByPassword(connInfos.identifier, connInfos.secret)
+	}
+
+	if connInfos.TypeAuth == "token"{
+		client = buildClientByToken(connInfos.identifier, connInfos.secret)
+	}
+
+	if client == nil {
+		client = buildClientNoAuth()
+	}
+
 	return client
+}
+
+func buildClientByPassword(email string, password string) *client.Client{
+	clientOptions := client.GetDefaultClientOptions().UsePasswordAuth(email, password)
+	clientOptions.SetBaseUrl(appclacksURL)
+	return client.New(clientOptions)
+
+}
+
+func buildClientByToken(orgID string, token string) *client.Client{
+	clientOptions := client.GetDefaultClientOptions().UseTokenAuth(orgID, token)
+	clientOptions.SetBaseUrl(appclacksURL)
+	return client.New(clientOptions)
+}
+
+func buildClientNoAuth() *client.Client {
+	clientOptions := client.GetDefaultClientOptions()
+	clientOptions.SetBaseUrl(appclacksURL)
+	return client.New(clientOptions)
 }
