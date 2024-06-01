@@ -3,12 +3,13 @@ package cmd
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
 	"time"
 
-	apitypes "github.com/appclacks/go-types"
+	goclient "github.com/appclacks/go-client"
 	"github.com/cheynewallace/tabby"
 	"github.com/spf13/cobra"
 )
@@ -42,7 +43,10 @@ func getHealthcheckCmd() *cobra.Command {
 			if identifier == "" {
 				identifier = healthcheckName
 			}
-			input := apitypes.GetHealthcheckInput{
+			if identifier == "" {
+				exitIfError(errors.New("you should pass an healthcheck name or ID"))
+			}
+			input := goclient.GetHealthcheckInput{
 				Identifier: identifier,
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
@@ -55,7 +59,7 @@ func getHealthcheckCmd() *cobra.Command {
 				fmt.Println(string(json))
 				os.Exit(0)
 			}
-			printHealthcheckTab([]apitypes.Healthcheck{healthcheck})
+			printHealthcheckTab([]goclient.Healthcheck{healthcheck})
 			os.Exit(0)
 		},
 	}
@@ -72,7 +76,7 @@ func deleteHealthcheckCmd() *cobra.Command {
 		Short: "Delete an healthcheck",
 		Run: func(cmd *cobra.Command, args []string) {
 			client := buildClient()
-			input := apitypes.DeleteHealthcheckInput{
+			input := goclient.DeleteHealthcheckInput{
 				ID: tokenID,
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
@@ -125,7 +129,7 @@ func listHealthchecksCmd() *cobra.Command {
 	return listHealthchecks
 }
 
-func printHealthcheckTab(healthchecks []apitypes.Healthcheck) {
+func printHealthcheckTab(healthchecks []goclient.Healthcheck) {
 	t := tabby.New()
 	t.AddHeader("ID", "Name", "Description", "Interval", "Timeout", "Labels", "Enabled", "Definition")
 	for _, healthcheck := range healthchecks {

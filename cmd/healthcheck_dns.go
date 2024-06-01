@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	apitypes "github.com/appclacks/go-types"
+	goclient "github.com/appclacks/go-client"
 	"github.com/spf13/cobra"
 )
 
@@ -28,14 +28,14 @@ func createDNSHealthcheckCmd() *cobra.Command {
 			labelsMap, err := toMap(labels)
 			exitIfError(err)
 
-			payload := apitypes.CreateDNSHealthcheckInput{
+			payload := goclient.CreateDNSHealthcheckInput{
 				Name:        name,
 				Description: description,
 				Labels:      labelsMap,
 				Timeout:     timeout,
 				Interval:    interval,
 				Enabled:     !disabled,
-				HealthcheckDNSDefinition: apitypes.HealthcheckDNSDefinition{
+				HealthcheckDNSDefinition: goclient.HealthcheckDNSDefinition{
 					Domain:      domain,
 					ExpectedIPs: expectedIPs,
 				},
@@ -50,7 +50,7 @@ func createDNSHealthcheckCmd() *cobra.Command {
 				fmt.Println(string(json))
 				os.Exit(0)
 			}
-			printHealthcheckTab([]apitypes.Healthcheck{healthcheck})
+			printHealthcheckTab([]goclient.Healthcheck{healthcheck})
 			os.Exit(0)
 		},
 	}
@@ -96,7 +96,7 @@ func updateDNSHealthcheckCmd() *cobra.Command {
 			client := buildClient()
 			labelsMap, err := toMap(labels)
 			exitIfError(err)
-			payload := apitypes.UpdateDNSHealthcheckInput{
+			payload := goclient.UpdateDNSHealthcheckInput{
 				ID:          id,
 				Name:        name,
 				Description: description,
@@ -104,7 +104,7 @@ func updateDNSHealthcheckCmd() *cobra.Command {
 				Timeout:     timeout,
 				Interval:    interval,
 				Enabled:     !disabled,
-				HealthcheckDNSDefinition: apitypes.HealthcheckDNSDefinition{
+				HealthcheckDNSDefinition: goclient.HealthcheckDNSDefinition{
 					Domain:      domain,
 					ExpectedIPs: expectedIPs,
 				},
@@ -119,7 +119,7 @@ func updateDNSHealthcheckCmd() *cobra.Command {
 				fmt.Println(string(json))
 				os.Exit(0)
 			}
-			printHealthcheckTab([]apitypes.Healthcheck{result})
+			printHealthcheckTab([]goclient.Healthcheck{result})
 			os.Exit(0)
 		},
 	}

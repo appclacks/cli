@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	apitypes "github.com/appclacks/go-types"
+	goclient "github.com/appclacks/go-client"
 	"github.com/spf13/cobra"
 )
 
@@ -30,14 +30,14 @@ func createTCPHealthcheckCmd() *cobra.Command {
 			labelsMap, err := toMap(labels)
 			exitIfError(err)
 
-			payload := apitypes.CreateTCPHealthcheckInput{
+			payload := goclient.CreateTCPHealthcheckInput{
 				Name:        name,
 				Description: description,
 				Labels:      labelsMap,
 				Timeout:     timeout,
 				Interval:    interval,
 				Enabled:     !disabled,
-				HealthcheckTCPDefinition: apitypes.HealthcheckTCPDefinition{
+				HealthcheckTCPDefinition: goclient.HealthcheckTCPDefinition{
 
 					Target: target,
 
@@ -55,7 +55,7 @@ func createTCPHealthcheckCmd() *cobra.Command {
 				fmt.Println(string(json))
 				os.Exit(0)
 			}
-			printHealthcheckTab([]apitypes.Healthcheck{healthcheck})
+			printHealthcheckTab([]goclient.Healthcheck{healthcheck})
 			os.Exit(0)
 		},
 	}
@@ -106,7 +106,7 @@ func updateTCPHealthcheckCmd() *cobra.Command {
 			labelsMap, err := toMap(labels)
 			exitIfError(err)
 
-			payload := apitypes.UpdateTCPHealthcheckInput{
+			payload := goclient.UpdateTCPHealthcheckInput{
 				ID:          id,
 				Name:        name,
 				Description: description,
@@ -114,7 +114,7 @@ func updateTCPHealthcheckCmd() *cobra.Command {
 				Timeout:     timeout,
 				Interval:    interval,
 				Enabled:     !disabled,
-				HealthcheckTCPDefinition: apitypes.HealthcheckTCPDefinition{
+				HealthcheckTCPDefinition: goclient.HealthcheckTCPDefinition{
 					Target: target,
 
 					Port:       port,
@@ -131,7 +131,7 @@ func updateTCPHealthcheckCmd() *cobra.Command {
 				fmt.Println(string(json))
 				os.Exit(0)
 			}
-			printHealthcheckTab([]apitypes.Healthcheck{result})
+			printHealthcheckTab([]goclient.Healthcheck{result})
 			os.Exit(0)
 		},
 	}

@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	apitypes "github.com/appclacks/go-types"
+	goclient "github.com/appclacks/go-client"
 	"github.com/spf13/cobra"
 )
 
@@ -47,14 +47,14 @@ func createHTTPHealthcheckCmd() *cobra.Command {
 			queryMap, err := toMap(query)
 			exitIfError(err)
 
-			payload := apitypes.CreateHTTPHealthcheckInput{
+			payload := goclient.CreateHTTPHealthcheckInput{
 				Name:        name,
 				Description: description,
 				Timeout:     timeout,
 				Labels:      labelsMap,
 				Interval:    interval,
 				Enabled:     !disabled,
-				HealthcheckHTTPDefinition: apitypes.HealthcheckHTTPDefinition{
+				HealthcheckHTTPDefinition: goclient.HealthcheckHTTPDefinition{
 					ValidStatus: validStatus,
 					Target:      target,
 					Method:      formattedMethod,
@@ -81,7 +81,7 @@ func createHTTPHealthcheckCmd() *cobra.Command {
 				fmt.Println(string(json))
 				os.Exit(0)
 			}
-			printHealthcheckTab([]apitypes.Healthcheck{healthcheck})
+			printHealthcheckTab([]goclient.Healthcheck{healthcheck})
 			os.Exit(0)
 		},
 	}
@@ -169,7 +169,7 @@ func updateHTTPHealthcheckCmd() *cobra.Command {
 			queryMap, err := toMap(query)
 			exitIfError(err)
 
-			payload := apitypes.UpdateHTTPHealthcheckInput{
+			payload := goclient.UpdateHTTPHealthcheckInput{
 				ID:          id,
 				Name:        name,
 				Description: description,
@@ -177,7 +177,7 @@ func updateHTTPHealthcheckCmd() *cobra.Command {
 				Timeout:     timeout,
 				Interval:    interval,
 				Enabled:     !disabled,
-				HealthcheckHTTPDefinition: apitypes.HealthcheckHTTPDefinition{
+				HealthcheckHTTPDefinition: goclient.HealthcheckHTTPDefinition{
 					ValidStatus: validStatus,
 					Target:      target,
 					Method:      formattedMethod,
@@ -204,7 +204,7 @@ func updateHTTPHealthcheckCmd() *cobra.Command {
 				fmt.Println(string(json))
 				os.Exit(0)
 			}
-			printHealthcheckTab([]apitypes.Healthcheck{result})
+			printHealthcheckTab([]goclient.Healthcheck{result})
 			os.Exit(0)
 		},
 	}
