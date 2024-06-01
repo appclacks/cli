@@ -6,7 +6,6 @@ import (
 )
 
 var outputFormat string
-var profile string
 
 func Execute() error {
 	var rootCmd = &cobra.Command{
