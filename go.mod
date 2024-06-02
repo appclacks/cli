@@ -3,8 +3,7 @@ module github.com/appclacks/cli
 go 1.22.0
 
 require (
-	github.com/appclacks/go-client v0.0.0-20240601155632-3db1fa07abb0
-	github.com/appclacks/go-types v0.0.0-20231220132907-2cf47ed6a994
+	github.com/appclacks/go-client v0.0.0-20240602132011-291c0d8ca225
 	github.com/cheynewallace/tabby v1.1.1
 	github.com/spf13/cobra v1.8.0
 )

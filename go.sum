@@ -1,11 +1,5 @@
-github.com/appclacks/go-client v0.0.0-20240601151507-d0a4ad1fc427 h1:aN0VY6sEK9WYDzS8zZjlYhwBbyKPmjFHQsULKsav/XM=
-github.com/appclacks/go-client v0.0.0-20240601151507-d0a4ad1fc427/go.mod h1:ZOQEaU5H5BTLZr326dMjvVbB+pdkeRX3emyu4cEq9GU=
-github.com/appclacks/go-client v0.0.0-20240601153604-3e5f27cc6056 h1:Iz5NtXS/BjLzgkVqYAB7/TYyskrJ66y6/vVj8HD+nKE=
-github.com/appclacks/go-client v0.0.0-20240601153604-3e5f27cc6056/go.mod h1:ZOQEaU5H5BTLZr326dMjvVbB+pdkeRX3emyu4cEq9GU=
-github.com/appclacks/go-client v0.0.0-20240601155632-3db1fa07abb0 h1:KV8CRzYMgh6k670Bmcku8SaSgDebIt4CCjszmVUKwuo=
-github.com/appclacks/go-client v0.0.0-20240601155632-3db1fa07abb0/go.mod h1:ZOQEaU5H5BTLZr326dMjvVbB+pdkeRX3emyu4cEq9GU=
-github.com/appclacks/go-types v0.0.0-20231220132907-2cf47ed6a994 h1:zxgTzkhrdTQ2jdzybr/+kZKOfjECBPHIznbZXBTItwc=
-github.com/appclacks/go-types v0.0.0-20231220132907-2cf47ed6a994/go.mod h1:djYgTPlVCW/7sUcPRuqvJOoOKB/uforzYC2Bo2JBPK8=
+github.com/appclacks/go-client v0.0.0-20240602132011-291c0d8ca225 h1:Bi2DlXudM58MLRjAEWRNrJe8ChG54r5mE8aJTH6AkUg=
+github.com/appclacks/go-client v0.0.0-20240602132011-291c0d8ca225/go.mod h1:ZOQEaU5H5BTLZr326dMjvVbB+pdkeRX3emyu4cEq9GU=
 github.com/cheynewallace/tabby v1.1.1 h1:JvUR8waht4Y0S3JF17G6Vhyt+FRhnqVCkk8l4YrOU54=
 github.com/cheynewallace/tabby v1.1.1/go.mod h1:Pba/6cUL8uYqvOc9RkyvFbHGrQ9wShyrn6/S/1OYVys=
 github.com/cpuguy83/go-md2man/v2 v2.0.3/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
