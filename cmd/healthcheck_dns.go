@@ -61,7 +61,7 @@ func createDNSHealthcheckCmd() *cobra.Command {
 
 	createDNSHealthcheck.PersistentFlags().StringVar(&description, "description", "", "healthcheck description")
 
-	createDNSHealthcheck.PersistentFlags().StringSliceVar(&labels, "labels", []string{}, "healthchecks labels (example: foo=bar)")
+	createDNSHealthcheck.PersistentFlags().StringSliceVar(&labels, "labels", []string{}, "healthcheck labels (example: foo=bar)")
 
 	createDNSHealthcheck.PersistentFlags().StringVar(&interval, "interval", "60s", "healthcheck interval (examples: 30s, 3m)")
 

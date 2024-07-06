@@ -59,6 +59,15 @@ func Execute() error {
 	command.AddCommand(createCommandHealthcheckCmd())
 	command.AddCommand(updateCommandHealthcheckCmd())
 
+	var pushgateway = &cobra.Command{
+		Use:   "pushgateway",
+		Short: "Manage pushgateway metrics",
+	}
+	pushgateway.AddCommand(createPushgatewayMetricCmd())
+	pushgateway.AddCommand(listPushgatewayMetricsCmd())
+	pushgateway.AddCommand(deletePushgatewayMetricCmd())
+	pushgateway.AddCommand(deleteAllPushgatewayMetricsCmd())
+
 	healthcheck.AddCommand(dns)
 	healthcheck.AddCommand(command)
 	healthcheck.AddCommand(tls)
@@ -66,6 +75,7 @@ func Execute() error {
 	healthcheck.AddCommand(http)
 
 	rootCmd.AddCommand(healthcheck)
+	rootCmd.AddCommand(pushgateway)
 
 	return rootCmd.Execute()
 }
