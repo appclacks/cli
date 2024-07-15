@@ -16,7 +16,7 @@ type PushgatewayMetric struct {
 	Type        string            `json:"type"`
 	CreatedAt   time.Time         `json:"created_at"`
 	ExpiresAt   *time.Time        `json:"expires_at,omitempty"`
-	Value       float32           `json:"value"`
+	Value       string            `json:"value"`
 }
 
 type CreateOrUpdatePushgatewayMetricInput struct {
@@ -25,7 +25,7 @@ type CreateOrUpdatePushgatewayMetricInput struct {
 	Labels      map[string]string `json:"labels" description:"Healthcheck labels" validate:"dive,keys,max=255,min=1,endkeys,max=255,min=1"`
 	TTL         string            `json:"ttl"`
 	Type        string            `json:"type" validate:"omitempty,oneof=counter gauge histogram summary"`
-	Value       float32           `json:"value" validate:"required"`
+	Value       string            `json:"value" validate:"required"`
 }
 
 type DeletePushgatewayMetricInput struct {

@@ -18,7 +18,7 @@ func createPushgatewayMetricCmd() *cobra.Command {
 	var labels []string
 	var ttl string
 	var metricType string
-	var value float32
+	var value string
 
 	var createPushgatewayMetric = &cobra.Command{
 		Use:   "create",
@@ -67,7 +67,7 @@ func createPushgatewayMetricCmd() *cobra.Command {
 
 	createPushgatewayMetric.PersistentFlags().StringVar(&metricType, "type", "", "metric type")
 
-	createPushgatewayMetric.PersistentFlags().Float32Var(&value, "value", 0, "metric value")
+	createPushgatewayMetric.PersistentFlags().StringVar(&value, "value", "", "metric value")
 	err = createPushgatewayMetric.MarkPersistentFlagRequired("value")
 	exitIfError(err)
 

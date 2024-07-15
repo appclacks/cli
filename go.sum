@@ -14,6 +14,8 @@ github.com/appclacks/go-client v0.0.0-20240703205617-8b0425724375 h1:eVJ+l4qRByZ
 github.com/appclacks/go-client v0.0.0-20240703205617-8b0425724375/go.mod h1:ZOQEaU5H5BTLZr326dMjvVbB+pdkeRX3emyu4cEq9GU=
 github.com/appclacks/go-client v0.0.0-20240704120510-358af014f040 h1:1Y8zxzWnIJJTN35I1m19Pf3Li7eRLQHAoAjjAta5ck4=
 github.com/appclacks/go-client v0.0.0-20240704120510-358af014f040/go.mod h1:ZOQEaU5H5BTLZr326dMjvVbB+pdkeRX3emyu4cEq9GU=
+github.com/appclacks/go-client v0.0.0-20240715201443-0ce681171dc2 h1:Ep/5yN6WEakl+mVhHSrhmxtxQWKU5ZzA1db+b9N2fTE=
+github.com/appclacks/go-client v0.0.0-20240715201443-0ce681171dc2/go.mod h1:ZOQEaU5H5BTLZr326dMjvVbB+pdkeRX3emyu4cEq9GU=
 github.com/cheynewallace/tabby v1.1.1 h1:JvUR8waht4Y0S3JF17G6Vhyt+FRhnqVCkk8l4YrOU54=
 github.com/cheynewallace/tabby v1.1.1/go.mod h1:Pba/6cUL8uYqvOc9RkyvFbHGrQ9wShyrn6/S/1OYVys=
 github.com/cpuguy83/go-md2man/v2 v2.0.3/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
