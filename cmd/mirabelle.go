@@ -3,12 +3,14 @@ package cmd
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
-	"errors"
 	"fmt"
+	"io"
+	"net/http"
+	"net/url"
 	"os"
 	"os/signal"
-	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -18,14 +20,29 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func mirabelleStreamCmd() *cobra.Command {
+func mirabelleHost() string {
+	mirabelleHost := os.Getenv("MIRABELLE_API_ENDPOINT")
+	if mirabelleHost == "" {
+		mirabelleHost = "localhost:5558"
+	}
+	return mirabelleHost
+}
+
+func mirabelleSubscribeCmd() *cobra.Command {
 	var query string
-	var streamCmd = &cobra.Command{
-		Use:   "stream",
-		Short: "Stream events from Mirabelle",
+	var channel string
+	var subscribeCmd = &cobra.Command{
+		Use:   "subscribe",
+		Short: "Subscribe to a Mirabelle channel",
 		Run: func(cmd *cobra.Command, args []string) {
+			options := websocket.DialOptions{
+				HTTPHeader: http.Header{},
+			}
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-			c, _, err := websocket.Dial(ctx, fmt.Sprintf("ws://localhost:5558/channel/my-channel?query=%s", query), nil)
+			host := mirabelleHost()
+			values := url.Values{}
+			values.Add("query", base64.StdEncoding.EncodeToString([]byte(query)))
+			c, _, err := websocket.Dial(ctx, fmt.Sprintf("ws://%s/channel/%s?%s", host, channel, values.Encode()), &options)
 			cancel()
 			exitIfError(err)
 
@@ -61,6 +78,8 @@ func mirabelleStreamCmd() *cobra.Command {
 				defer wg.Done()
 				for {
 					select {
+					case <-wsCtx.Done():
+						return
 					case s := <-signals:
 						if s == syscall.SIGINT || s == syscall.SIGTERM {
 							wsCancel()
@@ -77,11 +96,9 @@ func mirabelleStreamCmd() *cobra.Command {
 				for {
 					_, result, err := c.Read(wsCtx)
 					if err != nil {
-						if errors.Is(err, context.Canceled) || strings.Contains(err.Error(), "use of closed network connection") {
-							return
-						}
 						fmt.Println("websocket error: " + err.Error())
-						continue
+						wsCancel()
+						return
 					}
 					indented := &bytes.Buffer{}
 					if err := json.Indent(indented, result, "", "  "); err != nil {
@@ -101,8 +118,99 @@ func mirabelleStreamCmd() *cobra.Command {
 
 		},
 	}
-	streamCmd.PersistentFlags().StringVar(&query, "query", "true", "Query to execute")
+	subscribeCmd.PersistentFlags().StringVar(&query, "query", "[:true]", "Query to execute")
+	subscribeCmd.PersistentFlags().StringVar(&channel, "channel", "", "Channel to subscribe to")
+	err := subscribeCmd.MarkPersistentFlagRequired("channel")
+	exitIfError(err)
 
-	return streamCmd
+	return subscribeCmd
+}
 
+type Event struct {
+	Host        string            `json:"host,omitempty"`
+	Metric      float64           `json:"metric,omitempty"`
+	Service     string            `json:"service,omitempty"`
+	Time        int64             `json:"time"`
+	Name        string            `json:"name,omitempty"`
+	State       string            `json:"state,omitempty"`
+	Description string            `json:"description,omitempty"`
+	Tags        []string          `json:"tags,omitempty"`
+	Attributes  map[string]string `json:"attributes,omitempty"`
+}
+
+type EventPayload struct {
+	Events []Event `json:"events"`
+}
+
+func mirabelleEventCmd() *cobra.Command {
+	var service string
+	var metric float64
+	var name string
+	var attributes []string
+	var state string
+	var description string
+	var stream string
+	var tags []string
+
+	var sendCmd = &cobra.Command{
+		Use:   "send",
+		Short: "Send an event to Mirabelle",
+		Run: func(cmd *cobra.Command, args []string) {
+			now := time.Now().UnixNano()
+			hostname, err := os.Hostname()
+			exitIfError(err)
+			attributesMap, err := toMap(attributes)
+			exitIfError(err)
+			event := Event{
+				Metric:      metric,
+				Host:        hostname,
+				Service:     service,
+				Time:        now,
+				Name:        name,
+				State:       state,
+				Description: description,
+				Tags:        tags,
+				Attributes:  attributesMap,
+			}
+			client := http.Client{}
+			var reqBody io.Reader
+			payload := EventPayload{
+				Events: []Event{event},
+			}
+			json, err := json.Marshal(payload)
+			exitIfError(err)
+			reqBody = bytes.NewBuffer(json)
+			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+			defer cancel()
+			host := mirabelleHost()
+			request, err := http.NewRequestWithContext(
+				ctx,
+				http.MethodPut,
+				fmt.Sprintf("http://%s/api/v1/stream/%s", host, stream),
+				reqBody)
+			exitIfError(err)
+			request.Header.Add("content-type", "application/json")
+			response, err := client.Do(request)
+			exitIfError(err)
+			b, err := io.ReadAll(response.Body)
+			exitIfError(err)
+			defer response.Body.Close()
+			if response.StatusCode >= 300 {
+				exitIfError(fmt.Errorf("Fail to send event (status %s): %s", response.Status, string(b)))
+			} else {
+				fmt.Println("Event successfully sent")
+			}
+
+		},
+	}
+	sendCmd.PersistentFlags().StringVar(&stream, "stream", "default", "The stream to which the event shold be sent")
+	sendCmd.PersistentFlags().StringVar(&service, "service", "", "Service name")
+	sendCmd.PersistentFlags().Float64Var(&metric, "metric", 0, "Metric value (float64)")
+	sendCmd.PersistentFlags().StringVar(&name, "name", "", "Event name")
+	sendCmd.PersistentFlags().StringVar(&description, "description", "", "Event description")
+	sendCmd.PersistentFlags().StringVar(&state, "state", "", "Event state")
+	sendCmd.PersistentFlags().StringSliceVar(&attributes, "attributes", []string{}, "key-value attributes (example: foo=bar)")
+	sendCmd.PersistentFlags().StringSliceVar(&tags, "tags", []string{}, "Event tags")
+
+	return sendCmd
 }

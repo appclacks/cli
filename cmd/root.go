@@ -83,8 +83,13 @@ func Execute() error {
 		Use:   "mirabelle",
 		Short: "Interact with Mirabelle",
 	}
-	mirabelle.AddCommand(mirabelleStreamCmd())
-
+	mirabelle.AddCommand(mirabelleSubscribeCmd())
+	var mirabelleEvent = &cobra.Command{
+		Use:   "event",
+		Short: "Manage Mirabelle events",
+	}
+	mirabelleEvent.AddCommand(mirabelleEventCmd())
+	mirabelle.AddCommand(mirabelleEvent)
 	rootCmd.AddCommand(mirabelle)
 
 	return rootCmd.Execute()
