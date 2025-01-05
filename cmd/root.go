@@ -77,6 +77,21 @@ func Execute() error {
 	rootCmd.AddCommand(healthcheck)
 	rootCmd.AddCommand(pushgateway)
 
+	// mirabelle
+
+	var mirabelle = &cobra.Command{
+		Use:   "mirabelle",
+		Short: "Interact with Mirabelle",
+	}
+	mirabelle.AddCommand(mirabelleSubscribeCmd())
+	var mirabelleEvent = &cobra.Command{
+		Use:   "event",
+		Short: "Manage Mirabelle events",
+	}
+	mirabelleEvent.AddCommand(mirabelleEventCmd())
+	mirabelle.AddCommand(mirabelleEvent)
+	rootCmd.AddCommand(mirabelle)
+
 	return rootCmd.Execute()
 }
 
